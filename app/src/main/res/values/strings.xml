@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Event Notifier</string>
+    <string name="go_back">Go Back</string>
+    <string name="enter_your_uid">Enter your UID</string>
+    <string name="enter_your_mobile">Enter your Mobile no.</string>
+    <string name="enter_your_password">Enter your Password</string>
+    <string name="sign_in_to_your_account">Sign in to your account!</string>
+    <string name="sign_in">Sign In</string>
+    <string name="signin_as_student">Signin as student</string>
+    <string name="signin_as_faculty">Signin as faculty</string>
+    <string name="student">Student</string>
+    <string name="faculty">Faculty</string>
+    <string name="view_password">view password</string>
+    <string name="hide_password">hide password</string>
+    <string name="home">Home</string>
+    <string name="events">Events</string>
+    <string name="notifications">Notifications</string>
+    <string name="settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="at">at</string>
+    <string name="all">All</string>
+    <string name="today_s">Today\'s</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="ended">Ended</string>
+    <string name="profile">Profile</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="logout">Logout</string>
+
+    <string name="greeting_text">Hello, %s</string>
+    <string name="event_details">Event Details</string>
+    <string name="event_coordinators">Event Coordinators</string>
+    <string name="registration_link">Registration Link</string>
+    <string name="additional_info">Additional Info</string>
+    <string name="add_new_task">add new task</string>
+    <string name="title_activity_new_post">NewPostActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="add_event">Add Event</string>
+    <string name="add_new_event">Add New Event</string>
+    <string name="publish">Publish</string>
+    <string name="follow_up_taken_by">Follow up taken by</string>
+    <string name="responsible_person_action_taker">Responsible person/Action taker</string>
+    <string name="type_of_task_work_activity">Type of Task/Work/Activity</string>
+    <string name="name_of_task_work_activity">Name of Task/Work/Activity</string>
+    <string name="task_planning_authority">Task planning authority</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+
+    <!--dropdown menu items-->
+    <string-array name="type_of_task">
+        <item>Academics</item>
+        <item>Sports</item>
+        <item>Fest</item>
+        <item>Coding</item>
+    </string-array>
+</resources>

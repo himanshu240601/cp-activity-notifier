@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "189670679616",
+    "project_id": "cp-event-notifier",
+    "storage_bucket": "cp-event-notifier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189670679616:android:7ff64816fd630dc9612ba5",
+        "android_client_info": {
+          "package_name": "com.example.bfgiactivitynotifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189670679616-2sui4n0kjab4honftel9o6eg2smp1pmb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bfgiactivitynotifier",
+            "certificate_hash": "7603ef128b83017bf54721d238d8fd660319a682"
+          }
+        },
+        {
+          "client_id": "189670679616-fc546ov754jrdkds1npr3eprdn37c5m3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZjY9K5W7wNl0n2SjjwrJff-VsaRj-VLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189670679616-fc546ov754jrdkds1npr3eprdn37c5m3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
