@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_notifications.models;
+package com.example.bfgiactivitynotifier.fragments.fragment_notifications.models;
 
 //model class for the notifications
 //'message' contains the notification text body

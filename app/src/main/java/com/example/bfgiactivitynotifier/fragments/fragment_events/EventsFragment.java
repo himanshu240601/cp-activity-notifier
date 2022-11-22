@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_events;
+package com.example.bfgiactivitynotifier.fragments.fragment_events;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.databinding.FragmentEventsBinding;
-import com.example.bfgiactivitynotifier.students.fragment_events.adapters.AdapterEvent;
-import com.example.bfgiactivitynotifier.students.fragment_events.models.ModelEvent;
+import com.example.bfgiactivitynotifier.fragments.fragment_events.adapters.AdapterEvent;
+import com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_notifications;
+package com.example.bfgiactivitynotifier.fragments.fragment_notifications;
 
 import android.os.Bundle;
 
@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.databinding.FragmentNotificationsBinding;
-import com.example.bfgiactivitynotifier.students.fragment_notifications.adapters.AdapterNotification;
-import com.example.bfgiactivitynotifier.students.fragment_notifications.models.ModelNotification;
+import com.example.bfgiactivitynotifier.fragments.fragment_notifications.adapters.AdapterNotification;
+import com.example.bfgiactivitynotifier.fragments.fragment_notifications.models.ModelNotification;
 
 import java.util.ArrayList;
 import java.util.List;

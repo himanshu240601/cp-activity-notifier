@@ -30,6 +30,9 @@
     <string name="logout">Logout</string>
 
     <string name="greeting_text">Hello, %s</string>
+    <string name="posted_by">Posted By - %s</string>
+    <string name="last_updated">Last Updated - %s</string>
+
     <string name="event_details">Event Details</string>
     <string name="event_coordinators">Event Coordinators</string>
     <string name="registration_link">Registration Link</string>

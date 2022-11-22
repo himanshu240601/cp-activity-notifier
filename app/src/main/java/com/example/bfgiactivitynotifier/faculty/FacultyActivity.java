@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment;
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.common.Utility;
 import com.example.bfgiactivitynotifier.databinding.ActivityFacultyBinding;
-import com.example.bfgiactivitynotifier.faculty.fragment_events.FacultyEventsFragment;
 import com.example.bfgiactivitynotifier.faculty.fragment_home.FacultyHomeFragment;
-import com.example.bfgiactivitynotifier.students.fragment_notifications.NotificationsFragment;
-import com.example.bfgiactivitynotifier.students.fragment_settings.SettingsFragment;
+import com.example.bfgiactivitynotifier.fragments.fragment_events.EventsFragment;
+import com.example.bfgiactivitynotifier.fragments.fragment_notifications.NotificationsFragment;
+import com.example.bfgiactivitynotifier.fragments.fragment_settings.SettingsFragment;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class FacultyActivity extends AppCompatActivity {
@@ -25,7 +25,7 @@ public class FacultyActivity extends AppCompatActivity {
     //instead of re creating them
     //each time changing the screen
     private final Fragment homeFragment = new FacultyHomeFragment();
-    private final Fragment eventsFragment = new FacultyEventsFragment();
+    private final Fragment eventsFragment = new EventsFragment();
     private final Fragment notificationsFragment = new NotificationsFragment();
     private final Fragment settingsFragment = new SettingsFragment();
     //set the default fragment as home fragment

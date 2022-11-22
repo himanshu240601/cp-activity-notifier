@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_events.models;
+package com.example.bfgiactivitynotifier.fragments.fragment_events.models;
 
 public class ModelEvent {
     String id;

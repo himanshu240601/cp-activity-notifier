@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_settings;
+package com.example.bfgiactivitynotifier.fragments.fragment_settings;
 
 import static android.content.Context.MODE_PRIVATE;
 

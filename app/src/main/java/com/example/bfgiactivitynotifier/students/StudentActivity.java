@@ -2,10 +2,7 @@ package com.example.bfgiactivitynotifier.students;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -13,12 +10,10 @@ import androidx.fragment.app.Fragment;
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.common.Utility;
 import com.example.bfgiactivitynotifier.databinding.ActivityStudentBinding;
-import com.example.bfgiactivitynotifier.students.fragment_events.EventsFragment;
+import com.example.bfgiactivitynotifier.fragments.fragment_events.EventsFragment;
 import com.example.bfgiactivitynotifier.students.fragment_home.HomeFragment;
-import com.example.bfgiactivitynotifier.students.fragment_notifications.NotificationsFragment;
-import com.example.bfgiactivitynotifier.students.fragment_settings.SettingsFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.bfgiactivitynotifier.fragments.fragment_notifications.NotificationsFragment;
+import com.example.bfgiactivitynotifier.fragments.fragment_settings.SettingsFragment;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class StudentActivity extends AppCompatActivity {

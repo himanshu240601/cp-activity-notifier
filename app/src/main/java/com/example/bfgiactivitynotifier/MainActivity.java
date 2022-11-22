@@ -14,6 +14,11 @@ import com.example.bfgiactivitynotifier.databinding.ActivityMainBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.students.StudentActivity;
 import com.example.bfgiactivitynotifier.models.ModelUserData;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +59,16 @@ public class MainActivity extends AppCompatActivity {
                 //after connecting to the database the data will be handled
                 //in the setModelUserData itself
                 //then we'll just need to call this function without any arguments
-                Utility.setModelUserData(new ModelUserData("Bruce", "Bruce Wanye", "1972058", Utility.getCurrentDate()));
+
+                FirebaseFirestore.getInstance().collection("faculty_data").document(
+                        Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()
+                ).addSnapshotListener((value, error) -> {
+                    if(value!=null){
+                        String name = value.getString("name");
+                        String[] name_str = Objects.requireNonNull(name).split(" ");
+                        Utility.setModelUserData(new ModelUserData(name_str[0], name, FirebaseAuth.getInstance().getCurrentUser().getEmail(), Utility.getCurrentDate()));
+                    }
+                });
 
                 //according to the type of user
                 //go to the next screen

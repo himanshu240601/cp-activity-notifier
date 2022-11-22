@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_notifications.adapters;
+package com.example.bfgiactivitynotifier.fragments.fragment_notifications.adapters;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -12,9 +12,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bfgiactivitynotifier.EventActivity;
-import com.example.bfgiactivitynotifier.students.fragment_notifications.models.ModelNotification;
-import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.databinding.NotificationAlertBinding;
+import com.example.bfgiactivitynotifier.fragments.fragment_notifications.models.ModelNotification;
+import com.example.bfgiactivitynotifier.R;
 
 import java.util.List;
 

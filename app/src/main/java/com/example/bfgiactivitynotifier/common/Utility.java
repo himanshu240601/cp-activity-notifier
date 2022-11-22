@@ -4,14 +4,22 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.Window;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.models.ModelPost;
 import com.example.bfgiactivitynotifier.models.ModelUserData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class Utility {
     //user data model
@@ -21,13 +29,8 @@ public class Utility {
     //this modelUserData object will
     //help in setting the xml variables
     public static void setModelUserData(ModelUserData modelUserData) {
-        //Todo: here the data from the server is fetched
-        //Todo: and then the data in the model is set up
-        //Todo: get first_name from the name itself
-        //Todo: replace the arguments
         Utility.modelUserData = modelUserData;
     }
-
     //set status bar color
     public static void changeStatusBarColor(Window window, int color){
         //setting the background color of the status bar

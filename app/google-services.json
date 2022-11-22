@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "189670679616-2sui4n0kjab4honftel9o6eg2smp1pmb.apps.googleusercontent.com",
+          "client_id": "189670679616-a6fbq5j46298n5cmmel86is1c85ho7vq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.bfgiactivitynotifier",
-            "certificate_hash": "7603ef128b83017bf54721d238d8fd660319a682"
+            "certificate_hash": "f176d31f4be2eac674959344e4bc8fd1e5b56f86"
           }
         },
         {

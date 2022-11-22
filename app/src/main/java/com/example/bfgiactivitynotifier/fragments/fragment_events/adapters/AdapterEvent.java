@@ -1,4 +1,4 @@
-package com.example.bfgiactivitynotifier.students.fragment_events.adapters;
+package com.example.bfgiactivitynotifier.fragments.fragment_events.adapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bfgiactivitynotifier.EventActivity;
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.databinding.EventCardBinding;
-import com.example.bfgiactivitynotifier.students.fragment_events.models.ModelEvent;
+import com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class AdapterEvent extends RecyclerView.Adapter<AdapterEvent.MyViewHolder
         return events.size();
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         EventCardBinding eventCardBinding;
 

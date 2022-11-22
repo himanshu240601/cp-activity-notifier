@@ -5,7 +5,7 @@
     <data>
         <variable
             name="eventObject"
-            type="com.example.bfgiactivitynotifier.students.fragment_events.models.ModelEvent" />
+            type="com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent" />
     </data>
 
     <LinearLayout

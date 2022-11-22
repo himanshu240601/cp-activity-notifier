@@ -1,7 +1,5 @@
 package com.example.bfgiactivitynotifier.faculty;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -100,7 +98,7 @@ public class AddNewPostActivity extends AppCompatActivity {
 
             //add data to firebase fire store in the activities_data collection
             //store the dat into a map of type <string, string>
-            Map<String, String> docData = addData(string1, string2, string3, string4, string5, string6, string7);
+            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7);
             DocumentReference documentReference = firebaseFirestore.collection("activities_data").document();
             documentReference.set(docData).
                     addOnCompleteListener(this, task -> {
@@ -136,10 +134,10 @@ public class AddNewPostActivity extends AppCompatActivity {
         }
     }
 
-    private HashMap<String, String> addData(
+    private HashMap<String, Object> addData(
             String string1, String string2, String string3, String string4, String string5, String string6, String string7
     ){
-        HashMap<String, String> docData = new HashMap<>();
+        HashMap<String, Object> docData = new HashMap<>();
 
         docData.put("plan_authority", string1);
         docData.put("activity_name", string2);
@@ -148,6 +146,8 @@ public class AddNewPostActivity extends AppCompatActivity {
         docData.put("follow_up_taken_by", string5);
         docData.put("start_date", string6);
         docData.put("end_date", string7);
+
+        docData.put("last_updated", new Timestamp(new Date()));
         docData.put("added_by", FirebaseAuth.getInstance().getUid());
 
         return docData;

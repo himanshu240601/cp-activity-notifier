@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -16,13 +14,12 @@ import androidx.databinding.DataBindingUtil;
 import com.example.bfgiactivitynotifier.common.Utility;
 import com.example.bfgiactivitynotifier.databinding.ActivitySignInBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
-import com.example.bfgiactivitynotifier.students.StudentActivity;
 import com.example.bfgiactivitynotifier.models.ModelUserData;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.bfgiactivitynotifier.students.StudentActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -129,7 +126,15 @@ public class SignInActivity extends AppCompatActivity {
                                 //in the setModelUserData itself
                                 //then we'll just need to call this function without any arguments
 
-                                Utility.setModelUserData(new ModelUserData("Bruce", "Bruce Wanye", userId, Utility.getCurrentDate()));
+                                FirebaseFirestore.getInstance().collection("faculty_data").document(
+                                        Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()
+                                ).addSnapshotListener((value, error) -> {
+                                    if(value!=null){
+                                        String name = value.getString("name");
+                                        String[] name_str = Objects.requireNonNull(name).split(" ");
+                                        Utility.setModelUserData(new ModelUserData(name_str[0], name, userId, Utility.getCurrentDate()));
+                                    }
+                                });
 
                                 //according to the type of user
                                 //go to the next screen

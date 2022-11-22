@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.GetPostDataToRecyclerView;
 import com.example.bfgiactivitynotifier.common.Utility;
 import com.example.bfgiactivitynotifier.databinding.FragmentHomeBinding;
 
@@ -23,7 +24,11 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         fragmentHomeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         //use view to store the outermost view associated with the binding
+        View view = fragmentHomeBinding.getRoot();
 
-        return fragmentHomeBinding.getRoot();
+        GetPostDataToRecyclerView getPostDataToRecyclerView = new GetPostDataToRecyclerView();
+        getPostDataToRecyclerView.getFirestoreData(view);
+
+        return view;
     }
 }
