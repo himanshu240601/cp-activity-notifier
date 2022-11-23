@@ -6,6 +6,24 @@ public class ModelPost {
     String action_taker, activity_name, activity_type, added_by, end_date, follow_up_taken_by, plan_authority, start_date;
     Timestamp last_updated;
     String time_posted;
+    String event_time;
+    String event_venue;
+
+    public String getEvent_time() {
+        return event_time;
+    }
+
+    public void setEvent_time(String event_time) {
+        this.event_time = event_time;
+    }
+
+    public String getEvent_venue() {
+        return event_venue;
+    }
+
+    public void setEvent_venue(String event_venue) {
+        this.event_venue = event_venue;
+    }
 
     public String getTime_posted() {
         return time_posted;

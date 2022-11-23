@@ -55,6 +55,8 @@
     <string name="task_planning_authority">Task planning authority</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
+    <string name="event_time">Event Time</string>
+    <string name="venue">Venue</string>
 
     <!--dropdown menu items-->
     <string-array name="type_of_task">

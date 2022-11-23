@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bfgiactivitynotifier.EventActivity;
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.models.ModelPost;
 import com.example.bfgiactivitynotifier.databinding.EventCardBinding;
 import com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent;
 
@@ -20,11 +21,11 @@ public class AdapterEvent extends RecyclerView.Adapter<AdapterEvent.MyViewHolder
 
     //list for storing the data of notifications
     //and view for the current layout
-    List<ModelEvent> events;
+    List<ModelPost> events;
     View view;
 
     //constructor for the adapter class
-    public AdapterEvent(List<ModelEvent> events, View view) {
+    public AdapterEvent(List<ModelPost> events, View view) {
         this.events = events;
         this.view = view;
     }

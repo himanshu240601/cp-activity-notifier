@@ -1,5 +1,8 @@
 package com.example.bfgiactivitynotifier.fragments.fragment_events;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,17 +10,30 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.models.ModelPost;
 import com.example.bfgiactivitynotifier.databinding.FragmentEventsBinding;
 import com.example.bfgiactivitynotifier.fragments.fragment_events.adapters.AdapterEvent;
+import com.example.bfgiactivitynotifier.fragments.fragment_events.models.DocumentReferenceClass;
 import com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EventsFragment extends Fragment {
 
@@ -35,24 +51,14 @@ public class EventsFragment extends Fragment {
         fragmentEventsBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         //initialize the adapter class
-        AdapterEvent adapterEvent = new AdapterEvent(getEvents(), view);
-
-        //set the adapter for the recycler view
-        fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
+        //inside get events method once the data is fetched
+        getEvents(view);
 
         //filter the recycler view content according to the selected option in the filter chips
-        fragmentEventsBinding.allEvents.setOnClickListener(view1 -> {
-            Toast.makeText(view.getContext(), "Get All Events", Toast.LENGTH_SHORT).show();
-        });
-        fragmentEventsBinding.todayEvents.setOnClickListener(view1 -> {
-            Toast.makeText(view.getContext(), "Get Today's Events", Toast.LENGTH_SHORT).show();
-        });
-        fragmentEventsBinding.upcomingEvents.setOnClickListener(view1 -> {
-            Toast.makeText(view.getContext(), "Get Upcoming Events", Toast.LENGTH_SHORT).show();
-        });
-        fragmentEventsBinding.endedEvents.setOnClickListener(view1 -> {
-            Toast.makeText(view.getContext(), "Get Ended Events", Toast.LENGTH_SHORT).show();
-        });
+        fragmentEventsBinding.allEvents.setOnClickListener(view1 -> Toast.makeText(view.getContext(), "Get All Events", Toast.LENGTH_SHORT).show());
+        fragmentEventsBinding.todayEvents.setOnClickListener(view1 -> Toast.makeText(view.getContext(), "Get Today's Events", Toast.LENGTH_SHORT).show());
+        fragmentEventsBinding.upcomingEvents.setOnClickListener(view1 -> Toast.makeText(view.getContext(), "Get Upcoming Events", Toast.LENGTH_SHORT).show());
+        fragmentEventsBinding.endedEvents.setOnClickListener(view1 -> Toast.makeText(view.getContext(), "Get Ended Events", Toast.LENGTH_SHORT).show());
 
 
 
@@ -60,17 +66,52 @@ public class EventsFragment extends Fragment {
     }
 
     //get the data for the notifications
-    //currently dummy data
-    //original will be pushed from the firebase
-    public List<ModelEvent> getEvents(){
-        List<ModelEvent> list = new ArrayList<>();
+    //data will be pushed from the firebase
+    private final FirebaseFirestore firebaseFirestoreData = FirebaseFirestore.getInstance();
 
-        list.add(new ModelEvent("ROOTS_2022_CSE_BTECH", "Tech 'O' Fest", "CSI club is organising 'Tech O Fest', Including three events. FASTECH (coding) TECH'O'LAUGH (memes) PRESENTECH (presentation & pitching). All the students of btech can register below.", "Nov 1, 2022 - Nov 2, 2022", "9:30 AM", "Innovation Center"));
+    public void getEvents(View view){
+        SharedPreferences sp = view.getContext().getSharedPreferences("login", MODE_PRIVATE);
+        boolean isStudent = sp.getBoolean("student", true);
 
-        list.add(new ModelEvent("ROOTS_2022_CSE_BTECH", "Tech 'O' Fest", "CSI club is organising 'Tech O Fest', Including three events. FASTECH (coding) TECH'O'LAUGH (memes) PRESENTECH (presentation & pitching). All the students of btech can register below.", "Nov 1, 2022 - Nov 2, 2022", "9:30 AM", "Innovation Center"));
+        List<ModelPost> list = new ArrayList<>();
+        List<DocumentReferenceClass> documentReferenceList = new ArrayList<>();
 
-        list.add(new ModelEvent("ROOTS_2022_CSE_BTECH", "Tech 'O' Fest", "CSI club is organising 'Tech O Fest', Including three events. FASTECH (coding) TECH'O'LAUGH (memes) PRESENTECH (presentation & pitching). All the students of btech can register below.", "Nov 1, 2022 - Nov 2, 2022", "9:30 AM", "Innovation Center"));
+        if(!isStudent){
+            firebaseFirestoreData.collection("faculty_data").document(
+                    Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()
+            ).collection("activities")
+                    .get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        documentReferenceList.add(document.toObject(DocumentReferenceClass.class));
+                    }
+                    for(DocumentReferenceClass docRef : documentReferenceList){
+                        firebaseFirestoreData.document(docRef.getId()).get().addOnCompleteListener(task1 -> {
+                            if(task1.isSuccessful()){
+                                ModelPost modelEvent = task1.getResult().toObject(ModelPost.class);
+                                list.add(modelEvent);
+                            }
+                        });
+                    }
+                    //set the layout for the recycler view
+                    fragmentEventsBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        return list;
+                    //initialize the adapter class
+                    AdapterEvent adapterEvent = new AdapterEvent(list, view);
+
+                    //set the adapter for the recycler view
+                    fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
+                }
+            });
+        }else{
+            //set the layout for the recycler view
+            fragmentEventsBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+            //initialize the adapter class
+            AdapterEvent adapterEvent = new AdapterEvent(list, view);
+
+            //set the adapter for the recycler view
+            fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
+        }
     }
 }

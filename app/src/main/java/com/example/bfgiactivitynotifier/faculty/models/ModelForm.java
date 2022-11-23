@@ -8,6 +8,16 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 
 public class ModelForm extends BaseObservable {
     String start_date, end_date;
+    String event_time;
+
+    @Bindable
+    public String getEvent_time() {
+        return event_time;
+    }
+
+    public void setEvent_time(String event_time) {
+        this.event_time = event_time;
+    }
 
     @Bindable
     public String getStart_date() {

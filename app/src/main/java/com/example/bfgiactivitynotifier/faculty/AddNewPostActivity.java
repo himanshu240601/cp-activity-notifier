@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -12,9 +11,8 @@ import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.common.Utility;
 import com.example.bfgiactivitynotifier.databinding.ActivityAddNewPostBinding;
 import com.example.bfgiactivitynotifier.faculty.models.ModelForm;
+import com.example.bfgiactivitynotifier.faculty.models.TimePickerKotlinClass;
 import com.example.bfgiactivitynotifier.firebasecloudmessaging.MyFirebaseNotificationSender;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -57,7 +55,12 @@ public class AddNewPostActivity extends AppCompatActivity {
         //update the end date in form
         activityAddNewPostBinding.endDate.setOnClickListener(view -> {
             modelForm.getDateFromDialog("Select End Date", getSupportFragmentManager(),modelForm);
-            //remove focus from other edidtext
+            //remove focus from other edittext
+            removeFocus();
+        });
+
+        activityAddNewPostBinding.eventTime.setOnClickListener(v -> {
+            new TimePickerKotlinClass().getTimeFromDialog("Select Time", getSupportFragmentManager(), modelForm);
             removeFocus();
         });
 
@@ -91,14 +94,16 @@ public class AddNewPostActivity extends AppCompatActivity {
         String string5 = Objects.requireNonNull(activityAddNewPostBinding.followUpTakenBy.getEditText()).getText().toString();
         String string6 = Objects.requireNonNull(activityAddNewPostBinding.startDate.getText()).toString();
         String string7 = Objects.requireNonNull(activityAddNewPostBinding.endDate.getText()).toString();
+        String string8 = Objects.requireNonNull(activityAddNewPostBinding.eventTime.getText()).toString();
+        String string9 = Objects.requireNonNull(activityAddNewPostBinding.eventVenue.getText()).toString();
 
         //check if all data is entered correctly
-        if(validate(string1, string2, string3, string4, string5, string6, string7)){
+        if(validate(string1, string2, string3, string4, string5, string6, string7, string8, string9)){
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
             //add data to firebase fire store in the activities_data collection
             //store the dat into a map of type <string, string>
-            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7);
+            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7, string8, string9);
             DocumentReference documentReference = firebaseFirestore.collection("activities_data").document();
             documentReference.set(docData).
                     addOnCompleteListener(this, task -> {
@@ -106,9 +111,7 @@ public class AddNewPostActivity extends AppCompatActivity {
                                             Toast.makeText(this, "Activity added successfully!", Toast.LENGTH_SHORT).show();
                                             finish();
                                         }else{
-                                            task.addOnFailureListener(this, e -> {
-                                                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                            });
+                                            task.addOnFailureListener(this, e -> Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
                                         }
                                     });
 
@@ -121,13 +124,10 @@ public class AddNewPostActivity extends AppCompatActivity {
             firebaseFirestore.collection("faculty_data").document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
                     .collection("activities").document(documentReference.getId())
                     .set(docDataFaculty)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            //send push notification to all the user about event
-                            MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Activity Notifier", string2,"events", getApplicationContext());
-                            myFirebaseNotificationSender.sendNotification();
-                        }
+                    .addOnCompleteListener(task -> {
+                        //send push notification to all the user about event
+                        MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Activity Notifier", string2,"events", getApplicationContext());
+                        myFirebaseNotificationSender.sendNotification();
                     });
         }else{
             Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
@@ -135,7 +135,7 @@ public class AddNewPostActivity extends AppCompatActivity {
     }
 
     private HashMap<String, Object> addData(
-            String string1, String string2, String string3, String string4, String string5, String string6, String string7
+            String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9
     ){
         HashMap<String, Object> docData = new HashMap<>();
 
@@ -146,6 +146,8 @@ public class AddNewPostActivity extends AppCompatActivity {
         docData.put("follow_up_taken_by", string5);
         docData.put("start_date", string6);
         docData.put("end_date", string7);
+        docData.put("event_time", string8);
+        docData.put("event_venue", string9);
 
         docData.put("last_updated", new Timestamp(new Date()));
         docData.put("added_by", FirebaseAuth.getInstance().getUid());
@@ -154,9 +156,10 @@ public class AddNewPostActivity extends AppCompatActivity {
     }
 
     //validate the input by the user
-    private boolean validate(String string1, String string2, String string3, String string4, String string5, String string6, String string7) {
+    private boolean validate(String string1, String string2, String string3, String string4,
+                             String string5, String string6, String string7, String string8, String string9) {
         //if any of the input fields is empty then
         //false is returned otherwise true
-        return !string1.isEmpty() && !string2.isEmpty() && !string3.isEmpty() && !string4.isEmpty() && !string5.isEmpty() && !string6.isEmpty() && !string7.isEmpty();
+        return !string8.isEmpty() && !string9.isEmpty() && !string1.isEmpty() && !string2.isEmpty() && !string3.isEmpty() && !string4.isEmpty() && !string5.isEmpty() && !string6.isEmpty() && !string7.isEmpty();
     }
 }

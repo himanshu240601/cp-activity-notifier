@@ -5,7 +5,7 @@
     <data>
         <variable
             name="eventObject"
-            type="com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent" />
+            type="com.example.bfgiactivitynotifier.common.models.ModelPost" />
     </data>
 
     <LinearLayout
@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@{eventObject.title}"
+            android:text="@{eventObject.activity_name}"
             android:textStyle="bold"
             android:textSize="15sp"/>
 
@@ -32,7 +32,7 @@
             android:id="@+id/event_organiser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{eventObject.description}"
+            android:text="@{eventObject.plan_authority}"
             android:maxLines="2"
             android:ellipsize="end"
             android:layout_marginTop="6dp"
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{eventObject.venue}"
+            android:text="@{eventObject.event_venue}"
             android:textSize="14sp"
             android:drawablePadding="2dp"
             app:drawableStartCompat="@drawable/event_location" />
@@ -60,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{eventObject.event_date}"
+                android:text="@{eventObject.start_date}"
                 android:textSize="12sp"
                 android:drawablePadding="4dp"
                 app:drawableStartCompat="@drawable/event_date" />

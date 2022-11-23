@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'kotlin-android'
 }
 
 android {
@@ -19,6 +20,7 @@ android {
     }
 
     buildFeatures{
+        //noinspection DataBindingWithoutKapt
         dataBinding true
     }
 
