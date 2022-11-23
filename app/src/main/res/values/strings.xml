@@ -32,6 +32,9 @@
     <string name="greeting_text">Hello, %s</string>
     <string name="posted_by">Posted By - %s</string>
     <string name="last_updated">Last Updated - %s</string>
+    <string name="event_date">Event Date - %s</string>
+    <string name="event_timing">Event Timings - %s</string>
+    <string name="event_venue">Venue - %s</string>
 
     <string name="event_details">Event Details</string>
     <string name="event_coordinators">Event Coordinators</string>
@@ -57,6 +60,7 @@
     <string name="end_date">End Date</string>
     <string name="event_time">Event Time</string>
     <string name="venue">Venue</string>
+    <string name="you_don_t_have_any_events">You don\'t have any events</string>
 
     <!--dropdown menu items-->
     <string-array name="type_of_task">

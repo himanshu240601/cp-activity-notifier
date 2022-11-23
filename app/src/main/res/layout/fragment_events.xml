@@ -90,6 +90,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/empty_recyclerview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/you_don_t_have_any_events"
+                app:layout_constraintTop_toBottomOf="@+id/chip_group"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

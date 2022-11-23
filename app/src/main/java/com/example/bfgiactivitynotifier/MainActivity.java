@@ -59,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 //after connecting to the database the data will be handled
                 //in the setModelUserData itself
                 //then we'll just need to call this function without any arguments
+                String path = is_student ? "student_data" : "faculty_data";
 
-                FirebaseFirestore.getInstance().collection("faculty_data").document(
+                FirebaseFirestore.getInstance().collection(path).document(
                         Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()
                 ).addSnapshotListener((value, error) -> {
                     if(value!=null){

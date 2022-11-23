@@ -6,9 +6,6 @@
         <variable
             name="postObject"
             type="com.example.bfgiactivitynotifier.common.models.ModelPost" />
-        <variable
-            name="userObject"
-            type="com.example.bfgiactivitynotifier.common.Utility" />
     </data>
 
     <LinearLayout
@@ -42,7 +39,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{@string/posted_by(userObject.modelUserData.full_name)}"
+            android:text="@{@string/posted_by(postObject.posted_by)}"
             android:textSize="12sp"
             android:layout_marginTop="6dp"/>
 

@@ -126,7 +126,9 @@ public class SignInActivity extends AppCompatActivity {
                                 //in the setModelUserData itself
                                 //then we'll just need to call this function without any arguments
 
-                                FirebaseFirestore.getInstance().collection("faculty_data").document(
+                                String path = is_student ? "student_data" : "faculty_data";
+
+                                FirebaseFirestore.getInstance().collection(path).document(
                                         Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()
                                 ).addSnapshotListener((value, error) -> {
                                     if(value!=null){

@@ -82,36 +82,35 @@ public class EventsFragment extends Fragment {
             ).collection("activities")
                     .get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        documentReferenceList.add(document.toObject(DocumentReferenceClass.class));
-                    }
-                    for(DocumentReferenceClass docRef : documentReferenceList){
-                        firebaseFirestoreData.document(docRef.getId()).get().addOnCompleteListener(task1 -> {
-                            if(task1.isSuccessful()){
-                                ModelPost modelEvent = task1.getResult().toObject(ModelPost.class);
-                                list.add(modelEvent);
-                            }
-                        });
-                    }
-                    //set the layout for the recycler view
-                    fragmentEventsBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                    if(task.getResult()!=null){
+                        fragmentEventsBinding.emptyRecyclerview.setVisibility(View.GONE);
 
-                    //initialize the adapter class
-                    AdapterEvent adapterEvent = new AdapterEvent(list, view);
+                        for (DocumentSnapshot document : task.getResult()) {
+                            documentReferenceList.add(document.toObject(DocumentReferenceClass.class));
+                        }
+                        for(DocumentReferenceClass docRef : documentReferenceList){
+                            firebaseFirestoreData.document(docRef.getId()).get().addOnCompleteListener(task1 -> {
+                                if(task1.isSuccessful()){
+                                    ModelPost modelEvent = task1.getResult().toObject(ModelPost.class);
+                                    list.add(modelEvent);
+                                }
+                            });
+                        }
+                        //set the layout for the recycler view
+                        fragmentEventsBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-                    //set the adapter for the recycler view
-                    fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
+                        //initialize the adapter class
+                        AdapterEvent adapterEvent = new AdapterEvent(list, view);
+
+                        //set the adapter for the recycler view
+                        fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
+                    }else{
+                        fragmentEventsBinding.emptyRecyclerview.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }else{
-            //set the layout for the recycler view
-            fragmentEventsBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-            //initialize the adapter class
-            AdapterEvent adapterEvent = new AdapterEvent(list, view);
-
-            //set the adapter for the recycler view
-            fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
+            fragmentEventsBinding.emptyRecyclerview.setVisibility(View.VISIBLE);
         }
     }
 }

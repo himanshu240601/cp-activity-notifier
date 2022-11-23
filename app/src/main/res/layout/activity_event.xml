@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="eventObject"
+            type="com.example.bfgiactivitynotifier.common.models.ModelPost" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,7 +53,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="20dp">
 
@@ -61,14 +67,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CSI Club"
+                    android:text="@{eventObject.plan_authority}"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tech-o-Fest"
+                    android:text="@{eventObject.activity_name}"
                     android:layout_marginHorizontal="20dp"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -88,24 +94,6 @@
                     android:text="Gordon to piece clues together and take down the elusive killer obsessed with the Wayne family and Bruce himself.\n\ncat-and-mouse game attracts cryptic allies and dangerous adversaries, and no one is safe from harm. But is The Batman a blessing or a curse? A friend or a foe?"
                     android:layout_marginHorizontal="20dp"
                     android:lineHeight="18sp"
-                    android:layout_marginTop="4dp"
-                    tools:targetApi="p" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/registration_link"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="12dp"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="web"
-                    android:text="https://google-form/techofest/bfgi/bfcet"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="4dp" />
 
                 <TextView
@@ -120,28 +108,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last Date for Registration - Nov, 14, 2022"
+                    android:text="@{@string/event_date(eventObject.start_date)}"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="4dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Event Date - Nov, 20, 2022"
+                    android:text="@{@string/event_timing(eventObject.event_time)}"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="4dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Event Timings - 9:00 AM"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="4dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Venue - Main Seminar Hall"
+                    android:text="@{@string/event_venue(eventObject.event_venue)}"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="4dp"/>
 
@@ -157,13 +138,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Alferd Pennyworth, 9934384383"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="4dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Louis, 9944384383"
+                    android:text="@{eventObject.action_taker}"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="4dp"/>
 

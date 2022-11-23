@@ -103,8 +103,8 @@ public class AddNewPostActivity extends AppCompatActivity {
 
             //add data to firebase fire store in the activities_data collection
             //store the dat into a map of type <string, string>
-            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7, string8, string9);
             DocumentReference documentReference = firebaseFirestore.collection("activities_data").document();
+            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7, string8, string9, documentReference);
             documentReference.set(docData).
                     addOnCompleteListener(this, task -> {
                                         if(task.isSuccessful()){
@@ -135,7 +135,8 @@ public class AddNewPostActivity extends AppCompatActivity {
     }
 
     private HashMap<String, Object> addData(
-            String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9
+            String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9,
+            DocumentReference documentReference
     ){
         HashMap<String, Object> docData = new HashMap<>();
 
@@ -148,6 +149,8 @@ public class AddNewPostActivity extends AppCompatActivity {
         docData.put("end_date", string7);
         docData.put("event_time", string8);
         docData.put("event_venue", string9);
+
+        docData.put("event_id", documentReference);
 
         docData.put("last_updated", new Timestamp(new Date()));
         docData.put("added_by", FirebaseAuth.getInstance().getUid());

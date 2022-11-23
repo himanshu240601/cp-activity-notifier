@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GetPostDataToRecyclerView {
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -25,6 +26,8 @@ public class GetPostDataToRecyclerView {
             if (task.isSuccessful()) {
                 for (DocumentSnapshot document : task.getResult()) {
                     ModelPost modelPost = document.toObject(ModelPost.class);
+                    Objects.requireNonNull(modelPost).setTime_posted();
+                    modelPost.setPosted_by();
                     modelPostArrayList.add(modelPost);
                 }
                 //set the layout for the recycler view

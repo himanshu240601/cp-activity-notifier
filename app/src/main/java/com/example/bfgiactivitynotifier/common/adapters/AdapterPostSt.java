@@ -2,11 +2,13 @@ package com.example.bfgiactivitynotifier.common.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +16,12 @@ import com.example.bfgiactivitynotifier.EventActivity;
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.databinding.PostCardBinding;
 import com.example.bfgiactivitynotifier.common.models.ModelPost;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -45,15 +52,11 @@ public class AdapterPostSt extends RecyclerView.Adapter<AdapterPostSt.MyViewHold
         //the variables are declared inside the layout file
         //they'll fetch the data according to the object
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        modelPosts.get(position).setTime_posted(simpleDateFormat.format(modelPosts.get(position).getLast_updated().toDate()));
-
         holder.postCardBinding.setPostObject(modelPosts.get(position));
 
         holder.postCardBinding.eventsCard.setOnClickListener(view -> {
-            //Todo: send event id to be used in next layout
-            //Todo: for fetching the event data
             Intent intent = new Intent(view.getContext(), EventActivity.class);
+            intent.putExtra("event_data", modelPosts.get(position).getEvent_id());
             view.getContext().startActivity(intent);
         });
     }
