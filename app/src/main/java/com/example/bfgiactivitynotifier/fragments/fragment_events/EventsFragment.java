@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,16 +19,9 @@ import com.example.bfgiactivitynotifier.common.models.ModelPost;
 import com.example.bfgiactivitynotifier.databinding.FragmentEventsBinding;
 import com.example.bfgiactivitynotifier.fragments.fragment_events.adapters.AdapterEvent;
 import com.example.bfgiactivitynotifier.fragments.fragment_events.models.DocumentReferenceClass;
-import com.example.bfgiactivitynotifier.fragments.fragment_events.models.ModelEvent;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +74,7 @@ public class EventsFragment extends Fragment {
             ).collection("activities")
                     .get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    if(task.getResult()!=null){
+                    if(!task.getResult().isEmpty()){
                         fragmentEventsBinding.emptyRecyclerview.setVisibility(View.GONE);
 
                         for (DocumentSnapshot document : task.getResult()) {
@@ -104,13 +96,9 @@ public class EventsFragment extends Fragment {
 
                         //set the adapter for the recycler view
                         fragmentEventsBinding.eventsRecyclerView.setAdapter(adapterEvent);
-                    }else{
-                        fragmentEventsBinding.emptyRecyclerview.setVisibility(View.VISIBLE);
                     }
                 }
             });
-        }else{
-            fragmentEventsBinding.emptyRecyclerview.setVisibility(View.VISIBLE);
         }
     }
 }

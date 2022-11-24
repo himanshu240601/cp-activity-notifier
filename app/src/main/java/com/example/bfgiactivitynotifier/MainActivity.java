@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                     if(value!=null){
                         String name = value.getString("name");
                         String[] name_str = Objects.requireNonNull(name).split(" ");
-                        Utility.setModelUserData(new ModelUserData(name_str[0], name, FirebaseAuth.getInstance().getCurrentUser().getEmail(), Utility.getCurrentDate()));
+                        Utility.setModelUserData(new ModelUserData(name_str[1], name, FirebaseAuth.getInstance().getCurrentUser().getEmail(), Utility.getCurrentDate()));
                     }
                 });
 

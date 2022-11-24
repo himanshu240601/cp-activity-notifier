@@ -15,6 +15,32 @@ public class ModelPost {
     String event_venue;
     String posted_by;
     String event_id;
+    String event_description;
+    String event_registration_link;
+
+    public void setTime_posted(String time_posted) {
+        this.time_posted = time_posted;
+    }
+
+    public void setPosted_by(String posted_by) {
+        this.posted_by = posted_by;
+    }
+
+    public String getEvent_description() {
+        return event_description;
+    }
+
+    public void setEvent_description(String event_description) {
+        this.event_description = event_description;
+    }
+
+    public String getEvent_registration_link() {
+        return event_registration_link;
+    }
+
+    public void setEvent_registration_link(String event_registration_link) {
+        this.event_registration_link = event_registration_link;
+    }
 
     public String getEvent_id() {
         return event_id;
@@ -82,7 +108,11 @@ public class ModelPost {
                      String plan_authority,
                      String start_date,
                      Timestamp last_updated,
-                     String event_id) {
+                     String event_id,
+                     String event_time,
+                     String event_venue,
+                     String event_description,
+                     String event_registration_link) {
         this.action_taker = action_taker;
         this.activity_name = activity_name;
         this.activity_type = activity_type;
@@ -93,6 +123,10 @@ public class ModelPost {
         this.start_date = start_date;
         this.last_updated = last_updated;
         this.event_id = event_id;
+        this.event_time = event_time;
+        this.event_venue = event_venue;
+        this.event_registration_link = event_registration_link;
+        this.event_description = event_description;
     }
 
     public String getAction_taker() {

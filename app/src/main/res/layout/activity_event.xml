@@ -91,7 +91,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gordon to piece clues together and take down the elusive killer obsessed with the Wayne family and Bruce himself.\n\ncat-and-mouse game attracts cryptic allies and dangerous adversaries, and no one is safe from harm. But is The Batman a blessing or a curse? A friend or a foe?"
+                    android:text="@{eventObject.event_description}"
+                    android:layout_marginHorizontal="20dp"
+                    android:lineHeight="18sp"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/registration_link(eventObject.event_registration_link)}"
                     android:layout_marginHorizontal="20dp"
                     android:lineHeight="18sp"
                     android:layout_marginTop="4dp" />

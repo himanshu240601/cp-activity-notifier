@@ -38,7 +38,7 @@
 
     <string name="event_details">Event Details</string>
     <string name="event_coordinators">Event Coordinators</string>
-    <string name="registration_link">Registration Link</string>
+    <string name="registration_link">Registration Link - %s</string>
     <string name="additional_info">Additional Info</string>
     <string name="add_new_task">add new task</string>
     <string name="title_activity_new_post">NewPostActivity</string>
@@ -61,12 +61,15 @@
     <string name="event_time">Event Time</string>
     <string name="venue">Venue</string>
     <string name="you_don_t_have_any_events">You don\'t have any events</string>
+    <string name="add_description">Add description</string>
+    <string name="registration_link_form">Registration link</string>
 
     <!--dropdown menu items-->
     <string-array name="type_of_task">
-        <item>Academics</item>
+        <item>Departmental</item>
         <item>Sports</item>
-        <item>Fest</item>
+        <item>Cultural</item>
+        <item>NCC/NSS</item>
         <item>Coding</item>
     </string-array>
 </resources>

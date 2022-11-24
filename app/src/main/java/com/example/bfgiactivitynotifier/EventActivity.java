@@ -26,7 +26,7 @@ public class EventActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         //get data from firebase
-        FirebaseFirestore.getInstance().collection("activities_data").document(
+        FirebaseFirestore.getInstance().document(
                 intent.getStringExtra("event_data")
         ).addSnapshotListener((value, error) -> {
             if(value!=null){

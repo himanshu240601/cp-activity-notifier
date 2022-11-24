@@ -61,8 +61,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         holder.notificationAlertBinding.constraintLayout.setOnClickListener(view -> {
             //Todo: send event id to be used in next layout
             //Todo: for fetching the event data
-            Intent intent = new Intent(view.getContext(), EventActivity.class);
-            view.getContext().startActivity(intent);
+//            Intent intent = new Intent(view.getContext(), EventActivity.class);
+//            view.getContext().startActivity(intent);
         });
     }
 

@@ -1,5 +1,6 @@
 package com.example.bfgiactivitynotifier.faculty;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -8,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.GetPostDataToRecyclerView;
 import com.example.bfgiactivitynotifier.common.Utility;
+import com.example.bfgiactivitynotifier.common.adapters.AdapterPostSt;
+import com.example.bfgiactivitynotifier.common.models.ModelPost;
 import com.example.bfgiactivitynotifier.databinding.ActivityAddNewPostBinding;
 import com.example.bfgiactivitynotifier.faculty.models.ModelForm;
 import com.example.bfgiactivitynotifier.faculty.models.TimePickerKotlinClass;
@@ -85,6 +89,7 @@ public class AddNewPostActivity extends AppCompatActivity {
     //the task/activity/work is published in the app
     //add the task to database and send as a push
     //notification of the new task/activity/work
+    @SuppressLint("NotifyDataSetChanged")
     private void publishEvent(){
         //get all the data
         String string1 = Objects.requireNonNull(activityAddNewPostBinding.taskPlanAuthority.getEditText()).getText().toString();
@@ -96,15 +101,18 @@ public class AddNewPostActivity extends AppCompatActivity {
         String string7 = Objects.requireNonNull(activityAddNewPostBinding.endDate.getText()).toString();
         String string8 = Objects.requireNonNull(activityAddNewPostBinding.eventTime.getText()).toString();
         String string9 = Objects.requireNonNull(activityAddNewPostBinding.eventVenue.getText()).toString();
+        String string10 = Objects.requireNonNull(activityAddNewPostBinding.description.getEditText()).getText().toString();
+        String string11 = Objects.requireNonNull(activityAddNewPostBinding.registrationLink.getEditText()).getText().toString();
 
         //check if all data is entered correctly
-        if(validate(string1, string2, string3, string4, string5, string6, string7, string8, string9)){
+        if(validate(string1, string2, string3, string4, string5, string6, string7, string8, string9, string10, string11)){
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
             //add data to firebase fire store in the activities_data collection
             //store the dat into a map of type <string, string>
             DocumentReference documentReference = firebaseFirestore.collection("activities_data").document();
-            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7, string8, string9, documentReference);
+            Map<String, Object> docData = addData(string1, string2, string3, string4, string5, string6, string7,
+                    string8, string9, documentReference.getPath(), string10, string11);
             documentReference.set(docData).
                     addOnCompleteListener(this, task -> {
                                         if(task.isSuccessful()){
@@ -136,7 +144,7 @@ public class AddNewPostActivity extends AppCompatActivity {
 
     private HashMap<String, Object> addData(
             String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9,
-            DocumentReference documentReference
+            String documentReference, String string10, String string11
     ){
         HashMap<String, Object> docData = new HashMap<>();
 
@@ -149,6 +157,8 @@ public class AddNewPostActivity extends AppCompatActivity {
         docData.put("end_date", string7);
         docData.put("event_time", string8);
         docData.put("event_venue", string9);
+        docData.put("event_description", string10);
+        docData.put("event_registration_link", string11);
 
         docData.put("event_id", documentReference);
 
@@ -160,9 +170,9 @@ public class AddNewPostActivity extends AppCompatActivity {
 
     //validate the input by the user
     private boolean validate(String string1, String string2, String string3, String string4,
-                             String string5, String string6, String string7, String string8, String string9) {
+                             String string5, String string6, String string7, String string8, String string9, String string10, String string11) {
         //if any of the input fields is empty then
         //false is returned otherwise true
-        return !string8.isEmpty() && !string9.isEmpty() && !string1.isEmpty() && !string2.isEmpty() && !string3.isEmpty() && !string4.isEmpty() && !string5.isEmpty() && !string6.isEmpty() && !string7.isEmpty();
+        return !string10.isEmpty() && !string11.isEmpty() && !string8.isEmpty() && !string9.isEmpty() && !string1.isEmpty() && !string2.isEmpty() && !string3.isEmpty() && !string4.isEmpty() && !string5.isEmpty() && !string6.isEmpty() && !string7.isEmpty();
     }
 }

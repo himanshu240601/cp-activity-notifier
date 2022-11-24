@@ -19,7 +19,6 @@ import java.util.Objects;
 public class GetPostDataToRecyclerView {
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final CollectionReference collectionReference = firebaseFirestore.collection("activities_data");
-
     public void getFirestoreData(View view){
         List<ModelPost> modelPostArrayList = new ArrayList<>();
         collectionReference.get().addOnCompleteListener(task -> {

@@ -94,7 +94,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/type_of_task_work_activity"
-                    android:layout_margin="20dp">
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/task_type_dropdown"
@@ -102,6 +103,21 @@
                         android:layout_height="wrap_content"
                         android:inputType="none"
                         tools:ignore="LabelFor"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    style="?attr/textInputOutlinedStyle"
+                    android:hint="@string/add_description">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -236,6 +252,22 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registration_link"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:hint="@string/registration_link_form">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/publish_button"

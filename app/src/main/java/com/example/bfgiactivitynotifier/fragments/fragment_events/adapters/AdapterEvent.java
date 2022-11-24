@@ -47,9 +47,8 @@ public class AdapterEvent extends RecyclerView.Adapter<AdapterEvent.MyViewHolder
         holder.eventCardBinding.setEventObject(events.get(position));
 
         holder.eventCardBinding.eventsCard.setOnClickListener(view -> {
-            //Todo: send event id to be used in next layout
-            //Todo: for fetching the event data
             Intent intent = new Intent(view.getContext(), EventActivity.class);
+            intent.putExtra("event_data", events.get(position).getEvent_id());
             view.getContext().startActivity(intent);
         });
 
