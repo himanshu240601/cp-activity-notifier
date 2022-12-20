@@ -16,12 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MyFirebaseNotificationSender {
-    private final String NOTIFICATION_TITLE;
+    private String NOTIFICATION_TITLE;
     private final String NOTIFICATION_MESSAGE;
     private final String NOTIFICATION_TOPIC;
     private final Context context;
 
-    private final RequestQueue requestQueue;
+    private RequestQueue requestQueue;
     private final String url = "https://fcm.googleapis.com/fcm/send";
     private String serverKey = "key=";
 
@@ -32,8 +32,6 @@ public class MyFirebaseNotificationSender {
         this.context = context;
 
         getMetadata();
-
-        requestQueue = Volley.newRequestQueue(context);
     }
 
     private void getMetadata() {
@@ -42,13 +40,19 @@ public class MyFirebaseNotificationSender {
                     .getApplicationInfo(context.getApplicationContext().getPackageName(),
                             PackageManager.GET_META_DATA).metaData;
             serverKey += metaData.get("fcmKeyValue").toString();
+            requestQueue = Volley.newRequestQueue(context);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+            serverKey += "";
         }
-        serverKey += "";
     }
 
-    public void sendNotification() {
+    public void sendNotification(String type) {
+        if(type.equals("NEW")){
+            NOTIFICATION_TITLE += " New Event Alert!";
+        }else{
+            NOTIFICATION_TITLE += " Event Changed!";
+        }
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("to","/topics/"+NOTIFICATION_TOPIC);
@@ -61,7 +65,7 @@ public class MyFirebaseNotificationSender {
                     jsonObject,
                     response -> {
                     },
-                    error -> error.getLocalizedMessage()
+                    Throwable::getLocalizedMessage
             ){
                 @Override
                 public Map<String, String> getHeaders() {

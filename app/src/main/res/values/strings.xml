@@ -40,7 +40,7 @@
     <string name="event_coordinators">Event Coordinators</string>
     <string name="registration_link">Registration Link - %s</string>
     <string name="additional_info">Additional Info</string>
-    <string name="add_new_task">add new task</string>
+    <string name="add_new_task">Add new task</string>
     <string name="title_activity_new_post">NewPostActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -63,13 +63,20 @@
     <string name="you_don_t_have_any_events">You don\'t have any events</string>
     <string name="add_description">Add description</string>
     <string name="registration_link_form">Registration link</string>
-
-    <!--dropdown menu items-->
-    <string-array name="type_of_task">
-        <item>Departmental</item>
-        <item>Sports</item>
-        <item>Cultural</item>
-        <item>NCC/NSS</item>
-        <item>Coding</item>
-    </string-array>
+    <string name="edit_event">Edit event</string>
+    <string name="update_event">Update Event</string>
+    <string name="let_s_sign_you_in">Let\'s sign you in.</string>
+    <string name="welcome_back_you_ve_been_missed">Welcome back! You\'ve been missed.</string>
+    <string name="view_all">View All</string>
+    <string name="my_tasks">My Tasks</string>
+    <string name="not_complete">Not Complete</string>
+    <string name="completed">Completed</string>
+    <string name="in_progress">In Progress</string>
+    <string name="tasks_date">%s - %s</string>
+    <string name="you_don_t_have_any_tasks">You don\'t have any tasks.</string>
+    <string name="department">Department</string>
+    <string name="designation">Designation</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="you_don_t_have_any_notifications">You don\'t have any notifications!</string>
 </resources>

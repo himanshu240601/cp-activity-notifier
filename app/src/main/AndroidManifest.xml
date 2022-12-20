@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +14,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BfgiActivityNotifier"
         tools:targetApi="31">
-
         <activity
-            android:name=".faculty.AddNewPostActivity"
+            android:name=".SettingsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".faculty.tasks_activity.TasksActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.notification.NotificationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.profile.ProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".faculty.add_new_post.AddNewPostActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -30,22 +57,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".EventActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".SignInActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".students.StudentActivity"
-            android:configChanges="orientation|screenSize"
+            android:name=".signin.SignInActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -75,8 +87,8 @@
         </service>
 
         <meta-data
-            android:name = "fcmKeyValue"
-            android:value = "${FCM_KEY}"/>
+            android:name="fcmKeyValue"
+            android:value="${FCM_KEY}" />
     </application>
 
 </manifest>
