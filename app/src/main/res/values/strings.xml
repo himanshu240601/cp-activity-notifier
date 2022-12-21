@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Event Notifier</string>
+    <string name="app_name">Task Notifier</string>
     <string name="go_back">Go Back</string>
     <string name="enter_your_uid">Enter your UID</string>
     <string name="enter_your_mobile">Enter your Mobile no.</string>

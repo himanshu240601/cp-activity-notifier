@@ -113,8 +113,6 @@ public class SignInActivity extends AppCompatActivity {
                                                 department
                                         );
                                         commonClass.setModelUserData(userModel);
-
-                                        activitySignInBinding.buttonSignIn.setEnabled(false);
                                         //according to the type of user
                                         //go to the next screen
                                         startActivity(new Intent(SignInActivity.this, FacultyActivity.class));
@@ -122,11 +120,15 @@ public class SignInActivity extends AppCompatActivity {
                                     }
                                 });
 
-                            }else{
-                                activitySignInBinding.buttonSignIn.setEnabled(false);
-                                task.addOnFailureListener(this, e -> Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
                             }
+                            activitySignInBinding.buttonSignIn.setEnabled(true);
+                        })
+                        .addOnFailureListener(this, e -> {
+                            activitySignInBinding.buttonSignIn.setEnabled(true);
+                            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         });
+            }else{
+                activitySignInBinding.buttonSignIn.setEnabled(true);
             }
         });
     }

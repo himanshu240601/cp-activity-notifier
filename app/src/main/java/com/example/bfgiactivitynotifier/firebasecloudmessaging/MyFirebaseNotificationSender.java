@@ -49,9 +49,9 @@ public class MyFirebaseNotificationSender {
 
     public void sendNotification(String type) {
         if(type.equals("NEW")){
-            NOTIFICATION_TITLE += " New Event Alert!";
+            NOTIFICATION_TITLE += " | New Task Alert!";
         }else{
-            NOTIFICATION_TITLE += " Event Changed!";
+            NOTIFICATION_TITLE += " | Task Modified!";
         }
         JSONObject jsonObject = new JSONObject();
         try {

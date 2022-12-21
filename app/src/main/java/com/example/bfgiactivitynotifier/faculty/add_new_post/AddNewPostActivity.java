@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivityAddNewPostBinding;
 import com.example.bfgiactivitynotifier.faculty.add_new_post.models.ModelForm;
 import com.example.bfgiactivitynotifier.firebasecloudmessaging.MyFirebaseNotificationSender;
@@ -168,13 +169,16 @@ public class AddNewPostActivity extends AppCompatActivity {
                         if(task1.isSuccessful()){
                             Toast.makeText(this, "Activity added successfully!", Toast.LENGTH_SHORT).show();
                             //send push notification to all the user about event
-                            MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Activity Notifier", task,"tasks", getApplicationContext());
+                            String topic = resp+CommonClass.modelUserData.getDepartment();
+                            MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Task Notifier", task, topic, getApplicationContext());
                             myFirebaseNotificationSender.sendNotification("NEW");
                             finish();
-                        }else{
-                            task1.addOnFailureListener(this, e -> Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
                         }
                         activityAddNewPostBinding.publishButton.setEnabled(true);
+                    })
+                    .addOnFailureListener(this, e -> {
+                        activityAddNewPostBinding.publishButton.setEnabled(true);
+                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     });
         }else{
             Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
@@ -201,6 +205,8 @@ public class AddNewPostActivity extends AppCompatActivity {
         docData.put("added_by", FirebaseAuth.getInstance().getUid());
         docData.put("last_updated", new Timestamp(new Date()));
         docData.put("completed", false);
+
+        docData.put("department", CommonClass.modelUserData.getDepartment());
 
         return docData;
     }

@@ -6,12 +6,13 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.bfgiactivitynotifier.activities.profile.ProfileActivity;
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.activities.notification.NotificationActivity;
+import com.example.bfgiactivitynotifier.activities.profile.ProfileActivity;
 import com.example.bfgiactivitynotifier.activities.settings.SettingsActivity;
 import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivityFacultyBinding;
@@ -46,6 +47,8 @@ public class FacultyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityFacultyBinding = DataBindingUtil.setContentView(this, R.layout.activity_faculty);
 
+        subscribeToFirebaseTopic();
+
         activityFacultyBinding.setUserObject(CommonClass.modelUserData);
 
         activityFacultyBinding.setTaskCount(tasksCount);
@@ -69,8 +72,6 @@ public class FacultyActivity extends AppCompatActivity {
         activityFacultyBinding.viewAllTasks.setOnClickListener(view-> openTasksActivity("My Tasks"));
 
         activityFacultyBinding.addNewTask.setOnClickListener(view-> startActivity(new Intent(this, AddNewPostActivity.class)));
-
-        subscribeToFirebaseTopic();
     }
 
     private void openTasksActivity(String message){
@@ -96,34 +97,41 @@ public class FacultyActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 for (DocumentSnapshot document : task.getResult()) {
                     if(
-                            Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
+                            (Objects.equals(document.get("department"), CommonClass.modelUserData.getDepartment()))
+                            && (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
                             || Objects.equals(document.get("action_taker"), "All Faculty")
                             || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
-                            || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                            || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))
                     ){
                         UserTasks userTasks = document.toObject(UserTasks.class);
-
+                        int colorTask = R.color.completed;
                         if(userTasks!=null && !userTasks.isCompleted()){
                             try {
                                 String start = userTasks.getStart_date();
                                 String end = userTasks.getEnd_date();
                                 String status = commonClass.getTasksStatus(start, end);
                                 switch (status){
-                                    case "Upcoming":
-                                        tasksCount.setUpcoming(tasksCount.getUpcoming()+1);
+                                    case "Upcoming Tasks":
+                                        colorTask = R.color.upcoming;
+                                        tasksCount.setUpcoming(Integer.parseInt(tasksCount.getUpcoming())+1);
                                         break;
                                     case "In Progress":
-                                        tasksCount.setIn_progress(tasksCount.getIn_progress()+1);
+                                        colorTask = R.color.inProgress;
+                                        tasksCount.setIn_progress(Integer.parseInt(tasksCount.getIn_progress())+1);
                                         break;
                                     case "Not Complete":
-                                        tasksCount.setNot_completed(tasksCount.getNot_completed()+1);
+                                        colorTask = R.color.notComplete;
+                                        tasksCount.setNot_completed(Integer.parseInt(tasksCount.getNot_completed())+1);
                                 }
+                                userTasks.setColor(ContextCompat.getColor(this, colorTask));
                                 userTasks.setStatus(status);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }else{
-                            tasksCount.setCompleted(tasksCount.getCompleted()+1);
+                            Objects.requireNonNull(userTasks).setStatus("Completed Tasks");
+                            userTasks.setColor(ContextCompat.getColor(this, colorTask));
+                            tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())+1);
                         }
 
                         userTasksList.add(userTasks);
@@ -151,7 +159,15 @@ public class FacultyActivity extends AppCompatActivity {
 
     private void subscribeToFirebaseTopic() {
         //get firebase notifications
-        FirebaseMessaging.getInstance().subscribeToTopic("tasks")
+        FirebaseMessaging.getInstance().subscribeToTopic("All Faculty"+CommonClass.modelUserData.getDepartment())
+                .addOnCompleteListener(task -> {
+                    String msg = "Done";
+                    if (!task.isSuccessful()) {
+                        msg = "Failed";
+                    }
+                    Log.e("FacultyActivity", msg);
+                });
+        FirebaseMessaging.getInstance().subscribeToTopic(CommonClass.modelUserData.getFull_name()+CommonClass.modelUserData.getDepartment())
                 .addOnCompleteListener(task -> {
                     String msg = "Done";
                     if (!task.isSuccessful()) {

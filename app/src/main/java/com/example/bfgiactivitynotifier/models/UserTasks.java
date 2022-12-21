@@ -1,5 +1,7 @@
 package com.example.bfgiactivitynotifier.models;
 
+import static android.os.Build.VERSION_CODES.R;
+
 import com.google.firebase.Timestamp;
 
 public class UserTasks {
@@ -16,6 +18,16 @@ public class UserTasks {
     private boolean completed;
 
     private String status;
+
+    private int color;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public String getStatus() {
         return status;

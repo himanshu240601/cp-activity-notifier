@@ -36,13 +36,13 @@ public class CommonClass {
     //3. task_start_date equal or before current_date
     // end_date before current date (status = not complete)
     public String getTasksStatus(String dateStart, String dateEnd) throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
         Date start_date = format.parse(dateStart);
         Date end_date = format.parse(dateEnd);
-        Date current = format.parse(getCurrentDate());
+        @SuppressLint("SimpleDateFormat") Date current = format.parse(new SimpleDateFormat("dd MMM yyyy").format(Calendar.getInstance().getTime()));
         if(start_date!=null){
             if(start_date.compareTo(current) > 0) {
-                return "Upcoming";
+                return "Upcoming Tasks";
             } else if(start_date.compareTo(current) <= 0) {
                 if (end_date != null && end_date.compareTo(current) > 0) {
                     return "In Progress";

@@ -10,32 +10,50 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_card"
-        android:backgroundTint="#F4F4F4"
-        android:layout_marginBottom="4dp"
-        android:padding="16dp"
-        android:orientation="vertical">
+        android:layout_margin="4dp"
+        android:background="@drawable/background_card_rounded"
+        android:elevation="2dp">
 
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_card_rounded"
+            android:backgroundTint="@{taskObject.color}"
+            android:layout_marginStart="8dp"
+            android:layout_marginVertical="12dp"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{taskObject.task_type}"
-            android:textSize="12sp"/>
+            android:padding="16dp"
+            android:paddingStart="8dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:text="@{taskObject.task_name}"
-            android:ellipsize="end"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{taskObject.task_type}"
+                android:textColor="@{taskObject.color}"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@{@string/tasks_date(taskObject.start_date, taskObject.end_date)}"
-            android:textSize="11sp"
-            />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@{taskObject.task_name}"
+                android:ellipsize="end"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{@string/tasks_date(taskObject.start_date, taskObject.end_date)}"
+                android:textSize="11sp"
+                />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

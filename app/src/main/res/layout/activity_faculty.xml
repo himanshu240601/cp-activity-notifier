@@ -24,9 +24,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="12dp"
-                android:background="?attr/colorPrimaryVariant">
+                android:paddingStart="20dp"
+                android:paddingEnd="8dp"
+                android:paddingVertical="16dp"
+                android:background="?attr/colorPrimary">
 
                 <ImageView
                     android:id="@+id/openProfile"
@@ -70,11 +71,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_notification"
-                    android:layout_marginEnd="12dp"
                     tools:ignore="ContentDescription"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/openSettings"
-                    android:background="#00ffffff"
+                    android:backgroundTint="#00ffffff"
                     app:tint="@color/white" />
 
                 <ImageButton
@@ -85,149 +85,185 @@
                     tools:ignore="ContentDescription"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:background="#00ffffff"
+                    android:backgroundTint="#00ffffff"
                     app:tint="@color/white" />
 
             </RelativeLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:scrollbars="none">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/inProgress"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_card"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginRight="4dp"
-                    android:orientation="vertical">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-                        android:text="@{taskCount.in_progress}"/>
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/inProgress"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_card_rounded"
+                        android:backgroundTint="@color/inProgress"
+                        android:padding="12dp"
+                        android:layout_marginStart="20dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="@string/in_progress"/>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icon_in_progress"
+                            android:layout_gravity="end"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="32sp"
+                            android:text="@{taskCount.in_progress}"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:text="@string/in_progress"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/upcoming"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_card_rounded"
+                        android:backgroundTint="@color/upcoming"
+                        android:padding="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginHorizontal="8dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icon_upcoming"
+                            android:layout_gravity="end"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="32sp"
+                            android:text="@{taskCount.upcoming}"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:text="@string/upcoming"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/completed"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_card_rounded"
+                        android:backgroundTint="@color/completed"
+                        android:padding="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:elevation="2dp"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icon_completed"
+                            android:layout_gravity="end"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="32sp"
+                            android:text="@{taskCount.completed}"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:text="@string/completed"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/notComplete"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_card_rounded"
+                        android:backgroundTint="@color/notComplete"
+                        android:padding="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="20dp"
+                        android:elevation="2dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icon_not_completed"
+                            android:layout_gravity="end"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="32sp"
+                            android:text="@{taskCount.not_completed}"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:text="@string/not_complete"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/upcoming"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_card"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginLeft="4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-                        android:text="@{taskCount.upcoming}"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="@string/upcoming"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/completed"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_card"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginRight="4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-                        android:text="@{taskCount.completed}"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="@string/completed"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/notComplete"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_card"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginLeft="4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-                        android:text="@{taskCount.not_completed}"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="@string/not_complete"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </HorizontalScrollView>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="22dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="34dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/viewAllTasks"
                     android:text="@string/my_tasks"
                     android:textStyle="bold"
@@ -242,29 +278,25 @@
                     android:textColor="?attr/colorPrimary"
                     android:text="@string/view_all"
                     android:textSize="12sp"
+                    android:paddingStart="8dp"
+                    android:paddingVertical="8dp"
                     tools:ignore="RelativeOverlap" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/noTasks"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/you_don_t_have_any_tasks"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="100dp"
-                    android:textSize="13sp"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/noTasks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/you_don_t_have_any_tasks"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="100dp"
+                    android:textSize="13sp"/>
 
                 <ProgressBar
                     android:visibility="gone"
@@ -278,7 +310,8 @@
                     android:id="@+id/taskRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="20dp"/>
+                    android:paddingVertical="20dp"
+                    android:paddingHorizontal="18dp"/>
 
             </RelativeLayout>
 
@@ -293,8 +326,6 @@
             android:layout_margin="20dp"
             android:src="@drawable/icon_add"
             tools:ignore="ContentDescription"
-            android:backgroundTint="@color/purple_200"
-            app:rippleColor="@color/purple_500"
             app:borderWidth="0dp"
             android:elevation="4dp"
             app:tint="@color/white"/>
