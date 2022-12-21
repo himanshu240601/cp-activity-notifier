@@ -159,7 +159,9 @@ public class FacultyActivity extends AppCompatActivity {
 
     private void subscribeToFirebaseTopic() {
         //get firebase notifications
-        FirebaseMessaging.getInstance().subscribeToTopic("All Faculty"+CommonClass.modelUserData.getDepartment())
+        String username = CommonClass.modelUserData.getFull_name().replaceAll(" ", "_");
+        String department = CommonClass.modelUserData.getDepartment().replaceAll(" ", "_");
+        FirebaseMessaging.getInstance().subscribeToTopic("All_Faculty"+department)
                 .addOnCompleteListener(task -> {
                     String msg = "Done";
                     if (!task.isSuccessful()) {
@@ -167,7 +169,7 @@ public class FacultyActivity extends AppCompatActivity {
                     }
                     Log.e("FacultyActivity", msg);
                 });
-        FirebaseMessaging.getInstance().subscribeToTopic(CommonClass.modelUserData.getFull_name()+CommonClass.modelUserData.getDepartment())
+        FirebaseMessaging.getInstance().subscribeToTopic(username+department)
                 .addOnCompleteListener(task -> {
                     String msg = "Done";
                     if (!task.isSuccessful()) {

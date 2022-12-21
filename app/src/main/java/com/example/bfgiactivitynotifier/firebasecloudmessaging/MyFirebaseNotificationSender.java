@@ -28,9 +28,8 @@ public class MyFirebaseNotificationSender {
     public MyFirebaseNotificationSender(String NOTIFICATION_TITLE, String NOTIFICATION_MESSAGE, String NOTIFICATION_TOPIC, Context context) {
         this.NOTIFICATION_TITLE = NOTIFICATION_TITLE;
         this.NOTIFICATION_MESSAGE = NOTIFICATION_MESSAGE;
-        this.NOTIFICATION_TOPIC = NOTIFICATION_TOPIC;
+        this.NOTIFICATION_TOPIC = NOTIFICATION_TOPIC.replaceAll(" ","_");
         this.context = context;
-
         getMetadata();
     }
 
