@@ -48,7 +48,7 @@ public class TasksActivity extends AppCompatActivity {
             activityTasksBinding.noTasks.setVisibility(View.GONE);
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.VISIBLE);
 
-            UserTasksAdapter userTasksAdapter = new UserTasksAdapter(list, this);
+            UserTasksAdapter userTasksAdapter = new UserTasksAdapter(list, this, true);
             activityTasksBinding.recyclerViewAllTasks.setLayoutManager(new LinearLayoutManager(this));
             activityTasksBinding.recyclerViewAllTasks.setAdapter(userTasksAdapter);
         }else{

@@ -16,6 +16,7 @@ import com.example.bfgiactivitynotifier.databinding.ActivityNotificationBinding;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,8 @@ public class NotificationActivity extends AppCompatActivity {
         }else{
             activityNotificationBinding.noNotifications.setVisibility(View.GONE);
             activityNotificationBinding.alertsRecyclerView.setVisibility(View.VISIBLE);
+
+            Collections.reverse(notificationModels);
 
             NotificationsAdapter notificationsAdapter = new NotificationsAdapter(notificationModels,this);
             activityNotificationBinding.alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

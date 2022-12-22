@@ -62,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/task_planning_authority"
-                        android:completionThreshold="3"
+                        android:completionThreshold="5"
                         android:inputType="text"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -100,6 +100,7 @@
                         android:id="@+id/type_of_task"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:completionThreshold="5"
                         android:hint="@string/type_of_task_work_activity"
                         android:inputType="text"/>
 
@@ -130,6 +131,7 @@
                         android:id="@+id/follow_up_taken_by"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:completionThreshold="5"
                         android:hint="@string/follow_up_taken_by"
                         android:inputType="text"/>
 

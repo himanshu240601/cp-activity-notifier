@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="taskObject"
+            type="com.example.bfgiactivitynotifier.models.UserTasks" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{taskObject.task_type}"
+            android:textColor="@{taskObject.color}"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{taskObject.task_name}"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/tasks_date(taskObject.start_date, taskObject.end_date)}"
+            android:textSize="11sp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1A000000"
+            android:layout_marginVertical="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@string/task_plan_authority(taskObject.task_plan_authority)}"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/action_taker(taskObject.action_taker)}"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/follow_up(taskObject.follow_up_taken_by)}"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/task_status(taskObject.status)}"
+            android:textSize="13sp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1A000000"
+            android:layout_marginVertical="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/department_task(taskObject.department)}"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/task_added_by(taskObject.added_by_name)}"
+            android:textSize="13sp"
+            />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:visibility="gone"
+            android:id="@+id/actionButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="52dp">
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/modifyTask"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorPrimary"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/background_card_rounded_outline"/>
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/setCompleted"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/completed"
+                android:background="@drawable/background_card_rounded"
+                android:textAllCaps="false"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

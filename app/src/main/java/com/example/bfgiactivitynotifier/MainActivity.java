@@ -65,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
                 //go to the next screen
                 startActivity(new Intent(this, FacultyActivity.class));
+                finish();
             } else {
                 startActivity(new Intent(this, SignInActivity.class));
+                finish();
             }
-            finish();
         }, 2000);
     }
 }

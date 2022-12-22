@@ -43,8 +43,6 @@
     <string name="add_new_task">Add new task</string>
     <string name="title_activity_new_post">NewPostActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -79,4 +77,11 @@
     <string name="email">Email</string>
     <string name="name">Name</string>
     <string name="you_don_t_have_any_notifications">You don\'t have any notifications!</string>
+    <string name="task_plan_authority">Task Plan Authority - %s</string>
+    <string name="action_taker">Action Taker - %s</string>
+    <string name="follow_up">Follow Up Taken By - %s</string>
+    <string name="department_task">Department - %s</string>
+    <string name="task_added_by">Added By - %s</string>
+    <string name="task_status">Status - %s</string>
+    <string name="edit">Edit</string>
 </resources>

@@ -64,8 +64,9 @@
                 android:id="@+id/recyclerViewAllTasks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingVertical="20dp"
-                android:paddingHorizontal="18dp"/>
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentStart="true"
+                android:paddingHorizontal="16dp"/>
         </RelativeLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

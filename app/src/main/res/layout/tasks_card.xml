@@ -8,9 +8,11 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginHorizontal="4dp"
         android:background="@drawable/background_card_rounded"
         android:elevation="2dp">
 

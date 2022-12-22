@@ -22,6 +22,7 @@ import com.example.bfgiactivitynotifier.faculty.models.TasksCount;
 import com.example.bfgiactivitynotifier.faculty.tasks_activity.TasksActivity;
 import com.example.bfgiactivitynotifier.models.UserTasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -38,14 +39,20 @@ public class FacultyActivity extends AppCompatActivity {
 
     private final CommonClass commonClass = new CommonClass();
 
-    private static final TasksCount tasksCount = new TasksCount();
+    public static TasksCount tasksCount;
 
     public static final List<UserTasks> userTasksList = new ArrayList<>();
+
+    private static boolean loadDataFirstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityFacultyBinding = DataBindingUtil.setContentView(this, R.layout.activity_faculty);
+
+        tasksCount = new TasksCount();
+
+        loadDataFirstTime = true;
 
         subscribeToFirebaseTopic();
 
@@ -87,74 +94,131 @@ public class FacultyActivity extends AppCompatActivity {
         getTasksData();
     }
 
-    private void getTasksData() {
-        activityFacultyBinding.progressBar.setVisibility(View.VISIBLE);
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        Query collectionReference = firebaseFirestore.collection("activities_data")
-                .orderBy("last_updated", Query.Direction.DESCENDING);
+    private UserTasksAdapter userTasksAdapter;
 
-        collectionReference.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (DocumentSnapshot document : task.getResult()) {
-                    if(
-                            (Objects.equals(document.get("department"), CommonClass.modelUserData.getDepartment()))
-                            && (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
-                            || Objects.equals(document.get("action_taker"), "All Faculty")
-                            || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
-                            || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))
-                    ){
-                        UserTasks userTasks = document.toObject(UserTasks.class);
-                        int colorTask = R.color.completed;
-                        if(userTasks!=null && !userTasks.isCompleted()){
-                            try {
-                                String start = userTasks.getStart_date();
-                                String end = userTasks.getEnd_date();
-                                String status = commonClass.getTasksStatus(start, end);
-                                switch (status){
-                                    case "Upcoming Tasks":
-                                        colorTask = R.color.upcoming;
-                                        tasksCount.setUpcoming(Integer.parseInt(tasksCount.getUpcoming())+1);
-                                        break;
-                                    case "In Progress":
-                                        colorTask = R.color.inProgress;
-                                        tasksCount.setIn_progress(Integer.parseInt(tasksCount.getIn_progress())+1);
-                                        break;
-                                    case "Not Complete":
-                                        colorTask = R.color.notComplete;
-                                        tasksCount.setNot_completed(Integer.parseInt(tasksCount.getNot_completed())+1);
-                                }
-                                userTasks.setColor(ContextCompat.getColor(this, colorTask));
-                                userTasks.setStatus(status);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+    private void getTasksData(){
+        if (loadDataFirstTime){
+            activityFacultyBinding.progressBar.setVisibility(View.VISIBLE);
+        }
+        FirebaseFirestore.getInstance().collection("activities_data").orderBy("added_on", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, error) -> {
+                    List<DocumentSnapshot> documentSnapshots = Objects.requireNonNull(value).getDocuments();
+                    if(loadDataFirstTime){
+                        userTasksList.clear();
+
+                        for (DocumentSnapshot document : documentSnapshots) {
+                            UserTasks userTasks = getData(document, true);
+                            if(userTasks!=null){
+                                userTasksList.add(userTasks);
                             }
-                        }else{
-                            Objects.requireNonNull(userTasks).setStatus("Completed Tasks");
-                            userTasks.setColor(ContextCompat.getColor(this, colorTask));
-                            tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())+1);
                         }
 
-                        userTasksList.add(userTasks);
+                        activityFacultyBinding.progressBar.setVisibility(View.GONE);
 
+                        if(userTasksList.isEmpty()){
+                            activityFacultyBinding.taskRecyclerView.setVisibility(View.GONE);
+                            activityFacultyBinding.noTasks.setVisibility(View.VISIBLE);
+                        }else{
+                            activityFacultyBinding.noTasks.setVisibility(View.GONE);
+                            activityFacultyBinding.taskRecyclerView.setVisibility(View.VISIBLE);
+                            //initialize the adapter class
+                            userTasksAdapter = new UserTasksAdapter(userTasksList, this, false);
+
+                            //set the adapter for the recycler view
+                            activityFacultyBinding.taskRecyclerView.setAdapter(userTasksAdapter);
+                        }
+
+                        loadDataFirstTime = false;
+                    }else{
+                        DocumentChange documentChange = value.getDocumentChanges().get(0);
+
+                        DocumentSnapshot doc_snapshot = null;
+                        String path = documentChange.getDocument().getId();
+                        for(DocumentSnapshot snapshot : documentSnapshots){
+                            String id = snapshot.getId();
+                            if(path.contains(id)){
+                                doc_snapshot = snapshot;
+                                break;
+                            }
+                        }
+
+                        if(doc_snapshot!=null){
+                            int i;
+                            boolean add = true;
+                            for(i=0;i<userTasksList.size();i++) {
+                                if (Objects.equals(doc_snapshot.get("added_on"), userTasksList.get(i).getAdded_on())) {
+                                    add =false;
+                                    break;
+                                }
+                            }
+                            UserTasks userTasks = getData(doc_snapshot, add);
+                            if(userTasks!=null){
+                                if(add){
+                                    userTasksList.add(0, userTasks);
+                                    userTasksAdapter.notifyItemInserted(0);
+                                    activityFacultyBinding.taskRecyclerView.scrollToPosition(0);
+                                }else{
+                                    userTasksList.set(i, userTasks);
+                                    userTasksAdapter.notifyItemChanged(i);
+                                    activityFacultyBinding.taskRecyclerView.scrollToPosition(i);
+                                }
+                            }
+                        }
                     }
+                });
+    }
+
+    private UserTasks getData(DocumentSnapshot document, boolean count) {
+        UserTasks userTasks = null;
+        if(
+                (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
+                        || Objects.equals(document.get("action_taker"), "All Faculty")
+                        || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
+                        || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))
+        ){
+            userTasks = document.toObject(UserTasks.class);
+
+            int colorTask = R.color.completed;
+            if(userTasks!=null && !userTasks.isCompleted()){
+                userTasks.setDocument_id(document.getId());
+                try {
+                    String start = userTasks.getStart_date();
+                    String end = userTasks.getEnd_date();
+                    String status = commonClass.getTasksStatus(start, end);
+                    switch (status){
+                        case "Upcoming Tasks":
+                            colorTask = R.color.upcoming;
+                            if(count){
+                                tasksCount.setUpcoming(Integer.parseInt(tasksCount.getUpcoming())+1);
+                            }
+                            break;
+                        case "In Progress":
+                            colorTask = R.color.inProgress;
+                            if(count){
+                                tasksCount.setIn_progress(Integer.parseInt(tasksCount.getIn_progress())+1);
+                            }
+                            break;
+                        case "Not Complete":
+                            colorTask = R.color.notComplete;
+                            if(count){
+                                tasksCount.setNot_completed(Integer.parseInt(tasksCount.getNot_completed())+1);
+                            }
+                    }
+                    userTasks.setColor(ContextCompat.getColor(this, colorTask));
+                    userTasks.setStatus(status);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-
-                activityFacultyBinding.progressBar.setVisibility(View.GONE);
-
-                if(userTasksList.isEmpty()){
-                    activityFacultyBinding.taskRecyclerView.setVisibility(View.GONE);
-                    activityFacultyBinding.noTasks.setVisibility(View.VISIBLE);
-                }else{
-                    activityFacultyBinding.noTasks.setVisibility(View.GONE);
-                    activityFacultyBinding.taskRecyclerView.setVisibility(View.VISIBLE);
-                    //initialize the adapter class
-                    UserTasksAdapter userTasksAdapter = new UserTasksAdapter(userTasksList, this);
-
-                    //set the adapter for the recycler view
-                    activityFacultyBinding.taskRecyclerView.setAdapter(userTasksAdapter);
+            }else{
+                Objects.requireNonNull(userTasks).setStatus("Completed Tasks");
+                userTasks.setColor(ContextCompat.getColor(this, colorTask));
+                if(count){
+                    tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())+1);
                 }
             }
-        });
+
+        }
+        return userTasks;
     }
 
     private void subscribeToFirebaseTopic() {

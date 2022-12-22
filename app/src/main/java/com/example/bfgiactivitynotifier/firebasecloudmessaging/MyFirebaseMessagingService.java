@@ -29,12 +29,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         SharedPreferences sp = getSharedPreferences("notifications_sp", MODE_PRIVATE);
         Gson gson = new Gson();
         String current_time = new CommonClass().getCurrentDate();
-        String json = gson.toJson(new NotificationModel(message,  current_time,false));
+        String json = gson.toJson(new NotificationModel(message,  current_time));
         sp.edit().putString("notifications_sp"+json, json).apply();
     }
 
     public void getFirebaseMessage(String title, String message){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CH_FIREBASE")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.app_logo)
                 .setContentTitle(title)
                 .setContentText(message)

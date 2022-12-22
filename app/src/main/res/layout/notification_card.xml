@@ -10,9 +10,11 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/notification_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="12dp"
+        android:paddingHorizontal="20dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

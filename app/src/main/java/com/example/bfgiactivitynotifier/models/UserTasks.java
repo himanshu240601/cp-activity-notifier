@@ -1,10 +1,19 @@
 package com.example.bfgiactivitynotifier.models;
 
-import static android.os.Build.VERSION_CODES.R;
-
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserTasks {
+    private String document_id;
+
+    public String getDocument_id() {
+        return document_id;
+    }
+
+    public void setDocument_id(String document_id) {
+        this.document_id = document_id;
+    }
+
     private String task_plan_authority;
     private String task_name;
     private String task_type;
@@ -16,6 +25,25 @@ public class UserTasks {
     private String added_by;
     private Timestamp last_updated;
     private boolean completed;
+    private String department;
+
+    private String added_by_name;
+
+    public String getAdded_by_name() {
+        return added_by_name;
+    }
+
+    public void setAdded_by_name(String added_by_name) {
+        this.added_by_name = added_by_name;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
     private String status;
 
@@ -43,7 +71,7 @@ public class UserTasks {
     public UserTasks(String task_plan_authority,
                      String task_name, String task_type,
                      String action_taker, String follow_up_taken_by,
-                     String start_date, String end_date, Timestamp added_on, String added_by, Timestamp last_updated, boolean completed) {
+                     String start_date, String end_date, Timestamp added_on, String added_by, Timestamp last_updated, boolean completed, String department) {
         this.task_plan_authority = task_plan_authority;
         this.task_name = task_name;
         this.task_type = task_type;
@@ -55,6 +83,7 @@ public class UserTasks {
         this.added_by = added_by;
         this.last_updated = last_updated;
         this.completed = completed;
+        this.department = department;
     }
 
     public boolean isCompleted() {
@@ -135,6 +164,9 @@ public class UserTasks {
 
     public void setAdded_by(String added_by) {
         this.added_by = added_by;
+        FirebaseFirestore.getInstance().collection("faculty_data")
+                .document(added_by)
+                .get().addOnCompleteListener(task -> setAdded_by_name((String) task.getResult().get("name")));
     }
 
     public Timestamp getLast_updated() {
