@@ -1,7 +1,5 @@
 package com.example.bfgiactivitynotifier.models;
 
-import com.google.firebase.firestore.auth.User;
-
 public class UserModel {
     private String user_id;
     private String full_name;

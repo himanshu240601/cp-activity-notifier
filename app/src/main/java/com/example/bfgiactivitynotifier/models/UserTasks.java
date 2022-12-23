@@ -10,6 +10,16 @@ public class UserTasks {
         return document_id;
     }
 
+    private String delay_reason;
+
+    public String getDelay_reason() {
+        return delay_reason;
+    }
+
+    public void setDelay_reason(String delay_reason) {
+        this.delay_reason = delay_reason;
+    }
+
     public void setDocument_id(String document_id) {
         this.document_id = document_id;
     }
@@ -68,10 +78,11 @@ public class UserTasks {
     public UserTasks(){
     }
 
-    public UserTasks(String task_plan_authority,
+    public UserTasks(String delay_reason, String task_plan_authority,
                      String task_name, String task_type,
                      String action_taker, String follow_up_taken_by,
                      String start_date, String end_date, Timestamp added_on, String added_by, Timestamp last_updated, boolean completed, String department) {
+        this.delay_reason = delay_reason;
         this.task_plan_authority = task_plan_authority;
         this.task_name = task_name;
         this.task_type = task_type;

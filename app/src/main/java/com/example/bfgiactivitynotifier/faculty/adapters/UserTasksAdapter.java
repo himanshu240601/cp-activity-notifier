@@ -18,7 +18,6 @@ import com.example.bfgiactivitynotifier.databinding.TaskBottomSheetBinding;
 import com.example.bfgiactivitynotifier.databinding.TasksCardBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.faculty.add_new_post.AddNewPostActivity;
-import com.example.bfgiactivitynotifier.faculty.models.TasksCount;
 import com.example.bfgiactivitynotifier.faculty.tasks_activity.TasksActivity;
 import com.example.bfgiactivitynotifier.models.UserTasks;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -109,6 +108,11 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
 
         }
 
+        if(userTasksListAdapter.get(pos).getDelay_reason()!=null){
+            taskBottomSheetBinding.reasonTopBorder.setVisibility(View.VISIBLE);
+            taskBottomSheetBinding.resonOfDelay.setVisibility(View.VISIBLE);
+        }
+
         taskBottomSheetBinding.editTask.setOnClickListener(view-> {
             Intent intent = new Intent(context, AddNewPostActivity.class);
             intent.putExtra("position",pos);
@@ -120,39 +124,30 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
         taskBottomSheetBinding.removeTask.setOnClickListener(view-> new AlertDialog.Builder(context)
                 .setTitle("Remove Task")
                 .setMessage("Are you sure?")
-                .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
-                    String status = userTasksListAdapter.get(pos).getStatus();
-                    FirebaseFirestore.getInstance().collection("activities_data")
-                            .document(userTasksListAdapter.get(pos).getDocument_id()).delete()
-                            .addOnCompleteListener(task -> {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(context, "Task Removed!", Toast.LENGTH_SHORT).show();
+                .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> FirebaseFirestore.getInstance().collection("activities_data")
+                        .document(userTasksListAdapter.get(pos).getDocument_id()).delete()
+                        .addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+                                Toast.makeText(context, "Task Removed!", Toast.LENGTH_SHORT).show();
 
-                                    TasksCount tasksCount = FacultyActivity.tasksCount;
-                                    setTaskCount(status, tasksCount);
+                                bottomSheetDialog.dismiss();
 
-                                    if(status.equals("Completed Tasks")){
-                                        tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())-1);
-                                    }
-                                    bottomSheetDialog.dismiss();
-
-
-                                    //remove from the list
-                                    if(!TasksActivity.list.isEmpty()){
-                                        for(int j=0;j<FacultyActivity.userTasksList.size();j++){
-                                            if(Objects.equals(TasksActivity.list.get(pos).getDocument_id(), FacultyActivity.userTasksList.get(j).getDocument_id())){
-                                                FacultyActivity.removedPosition = j;
-                                                break;
-                                            }
+                                //remove from the list
+                                if(!TasksActivity.list.isEmpty()){
+                                    for(int j=0;j<FacultyActivity.userTasksList.size();j++){
+                                        if(Objects.equals(TasksActivity.list.get(pos).getDocument_id(), FacultyActivity.userTasksList.get(j).getDocument_id())){
+                                            FacultyActivity.removedPosition = j;
+                                            break;
                                         }
-                                        TasksActivity.list.remove(pos);
-                                    }else{
-                                        FacultyActivity.userTasksList.remove(pos);
                                     }
-                                    notifyItemRemoved(pos);
+                                    TasksActivity.list.remove(pos);
+                                }else{
+                                    FacultyActivity.userTasksList.remove(pos);
+                                    new FacultyActivity().categoriesTasksCount();
                                 }
-                            });
-                })
+                                notifyItemRemoved(pos);
+                            }
+                        }))
                 .setNegativeButton(android.R.string.no, null)
                 .show());
 
@@ -162,16 +157,11 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
                 .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("completed", true);
-                    String status = userTasksListAdapter.get(pos).getStatus();
                     FirebaseFirestore.getInstance().collection("activities_data")
                             .document(userTasksListAdapter.get(pos).getDocument_id()).update(hashMap)
                             .addOnCompleteListener(task -> {
                                 if(task.isSuccessful()){
                                     Toast.makeText(context, "Task Completed!", Toast.LENGTH_SHORT).show();
-
-                                    TasksCount tasksCount = FacultyActivity.tasksCount;
-                                    setTaskCount(status, tasksCount);
-                                    tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())+1);
 
                                     if (!TasksActivity.list.isEmpty()){
                                         ctx.checkFunction(userTasksListAdapter.get(pos).getDocument_id());
@@ -185,19 +175,6 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
                 .show());
 
         bottomSheetDialog.show();
-    }
-
-    private void setTaskCount(String status, TasksCount tasksCount) {
-        switch (status){
-            case "Upcoming Tasks":
-                tasksCount.setUpcoming(Integer.parseInt(tasksCount.getUpcoming())-1);
-                break;
-            case "In Progress":
-                tasksCount.setIn_progress(Integer.parseInt(tasksCount.getIn_progress())-1);
-                break;
-            case "Not Complete":
-                tasksCount.setNot_completed(Integer.parseInt(tasksCount.getNot_completed())-1);
-        }
     }
 
     @Override

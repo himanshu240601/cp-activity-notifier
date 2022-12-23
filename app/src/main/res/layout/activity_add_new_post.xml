@@ -189,6 +189,33 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/changeText"
+                    android:visibility="gone"
+                    android:layout_marginTop="18dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/please_specify_a_reason_for_change_in_this_task_not_mandatory"
+                    android:textSize="12sp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/delayTextBox"
+                    android:visibility="gone"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/delay_reason"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint=""
+                        android:inputType="textMultiLine"
+                        android:maxLines="2"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <Button
                     android:id="@+id/publish_button"
                     android:layout_width="match_parent"

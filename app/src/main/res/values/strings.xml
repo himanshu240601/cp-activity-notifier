@@ -83,8 +83,10 @@
     <string name="department_task">Department - %s</string>
     <string name="task_added_by">Added By - %s</string>
     <string name="task_status">Status - %s</string>
+    <string name="delay">*Reason for Change - %s</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
     <string name="mark_as_completed">Mark as Completed</string>
     <string name="save_changes">Save Changes</string>
+    <string name="please_specify_a_reason_for_change_in_this_task_not_mandatory">*please specify a reason for change in this task (not mandatory)</string>
 </resources>

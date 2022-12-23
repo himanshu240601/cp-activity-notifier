@@ -58,6 +58,9 @@ public class AddNewPostActivity extends AppCompatActivity {
         activityAddNewPostBinding.setModelObject(modelForm);
 
         if(position!=-1){
+            activityAddNewPostBinding.changeText.setVisibility(View.VISIBLE);
+            activityAddNewPostBinding.delayTextBox.setVisibility(View.VISIBLE);
+
             UserTasks userTasks = FacultyActivity.userTasksList.get(position);
             activityAddNewPostBinding.taskPlanAuthority.setText(userTasks.getTask_plan_authority());
             activityAddNewPostBinding.nameOfTask.setText(userTasks.getTask_name());
@@ -250,6 +253,11 @@ public class AddNewPostActivity extends AppCompatActivity {
             docData.put("added_by", FirebaseAuth.getInstance().getUid());
             docData.put("completed", false);
             docData.put("department", CommonClass.modelUserData.getDepartment());
+        }else{
+            String reason = Objects.requireNonNull(activityAddNewPostBinding.delayReason.getText()).toString();
+            if(!reason.isEmpty()){
+                docData.put("delay_reason", reason);
+            }
         }
 
         return docData;

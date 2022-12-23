@@ -37,11 +37,10 @@ import java.util.Objects;
 public class FacultyActivity extends AppCompatActivity {
 
     public static int removedPosition = -1;
-    private ActivityFacultyBinding activityFacultyBinding;
+    @SuppressLint("StaticFieldLeak")
+    private static ActivityFacultyBinding activityFacultyBinding;
 
     private final CommonClass commonClass = new CommonClass();
-
-    public static TasksCount tasksCount;
 
     public static final List<UserTasks> userTasksList = new ArrayList<>();
 
@@ -54,6 +53,7 @@ public class FacultyActivity extends AppCompatActivity {
             userTasksList.remove(removedPosition);
             userTasksAdapter.notifyItemRemoved(removedPosition);
             removedPosition = -1;
+            categoriesTasksCount();
         }
     }
 
@@ -62,15 +62,11 @@ public class FacultyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityFacultyBinding = DataBindingUtil.setContentView(this, R.layout.activity_faculty);
 
-        tasksCount = new TasksCount();
-
         loadDataFirstTime = true;
 
         subscribeToFirebaseTopic();
 
         activityFacultyBinding.setUserObject(CommonClass.modelUserData);
-
-        activityFacultyBinding.setTaskCount(tasksCount);
 
         createRecyclerView();
 
@@ -121,7 +117,7 @@ public class FacultyActivity extends AppCompatActivity {
                         userTasksList.clear();
 
                         for (DocumentSnapshot document : documentSnapshots) {
-                            UserTasks userTasks = getData(document, true);
+                            UserTasks userTasks = getData(document);
                             if(userTasks!=null){
                                 userTasksList.add(userTasks);
                             }
@@ -140,9 +136,8 @@ public class FacultyActivity extends AppCompatActivity {
 
                             //set the adapter for the recycler view
                             activityFacultyBinding.taskRecyclerView.setAdapter(userTasksAdapter);
+                            loadDataFirstTime = false;
                         }
-
-                        loadDataFirstTime = false;
                     }else{
                         DocumentChange documentChange = value.getDocumentChanges().get(0);
 
@@ -165,7 +160,7 @@ public class FacultyActivity extends AppCompatActivity {
                                     break;
                                 }
                             }
-                            UserTasks userTasks = getData(doc_snapshot, add);
+                            UserTasks userTasks = getData(doc_snapshot);
                             if(userTasks!=null){
                                 if(add){
                                     //nothing to change
@@ -177,16 +172,42 @@ public class FacultyActivity extends AppCompatActivity {
                                     userTasksAdapter.notifyItemInserted(0);
                                     activityFacultyBinding.taskRecyclerView.scrollToPosition(0);
                                 }else{
+                                    if (!TasksActivity.list.isEmpty()){
+                                        TasksActivity.changedPosition = i;
+                                    }
                                     userTasksList.set(i, userTasks);
                                     userTasksAdapter.notifyItemChanged(i);
                                 }
                             }
                         }
                     }
+                    categoriesTasksCount();
                 });
     }
 
-    private UserTasks getData(DocumentSnapshot document, boolean count) {
+    public void categoriesTasksCount(){
+
+        TasksCount tasksCount = new TasksCount();
+        for(UserTasks userTasks : userTasksList){
+            switch (userTasks.getStatus()){
+                case "Upcoming Tasks":
+                    tasksCount.setUpcoming(Integer.parseInt(tasksCount.getUpcoming())+1);
+                    break;
+                case "In Progress":
+                    tasksCount.setIn_progress(Integer.parseInt(tasksCount.getIn_progress())+1);
+                    break;
+                case "Not Complete":
+                    tasksCount.setNot_completed(Integer.parseInt(tasksCount.getNot_completed())+1);
+                    break;
+                default:
+                    tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())+1);
+
+            }
+        }
+        activityFacultyBinding.setTaskCount(tasksCount);
+    }
+
+    private UserTasks getData(DocumentSnapshot document) {
         UserTasks userTasks = null;
         if(
                 (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
@@ -205,21 +226,12 @@ public class FacultyActivity extends AppCompatActivity {
                     switch (status){
                         case "Upcoming Tasks":
                             colorTask = R.color.upcoming;
-                            if(count){
-                                tasksCount.setUpcoming(Integer.parseInt(tasksCount.getUpcoming())+1);
-                            }
                             break;
                         case "In Progress":
                             colorTask = R.color.inProgress;
-                            if(count){
-                                tasksCount.setIn_progress(Integer.parseInt(tasksCount.getIn_progress())+1);
-                            }
                             break;
                         case "Not Complete":
                             colorTask = R.color.notComplete;
-                            if(count){
-                                tasksCount.setNot_completed(Integer.parseInt(tasksCount.getNot_completed())+1);
-                            }
                     }
                     userTasks.setColor(ContextCompat.getColor(this, colorTask));
                     userTasks.setStatus(status);
@@ -229,9 +241,6 @@ public class FacultyActivity extends AppCompatActivity {
             }else{
                 Objects.requireNonNull(userTasks).setStatus("Completed Tasks");
                 userTasks.setColor(ContextCompat.getColor(this, colorTask));
-                if(count){
-                    tasksCount.setCompleted(Integer.parseInt(tasksCount.getCompleted())+1);
-                }
             }
 
         }
