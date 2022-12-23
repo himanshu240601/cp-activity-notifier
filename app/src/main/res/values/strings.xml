@@ -84,4 +84,7 @@
     <string name="task_added_by">Added By - %s</string>
     <string name="task_status">Status - %s</string>
     <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+    <string name="mark_as_completed">Mark as Completed</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

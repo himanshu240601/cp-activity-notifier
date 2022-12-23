@@ -1,5 +1,6 @@
 package com.example.bfgiactivitynotifier.faculty;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ import java.util.Objects;
 
 public class FacultyActivity extends AppCompatActivity {
 
+    public static int removedPosition = -1;
     private ActivityFacultyBinding activityFacultyBinding;
 
     private final CommonClass commonClass = new CommonClass();
@@ -44,6 +46,16 @@ public class FacultyActivity extends AppCompatActivity {
     public static final List<UserTasks> userTasksList = new ArrayList<>();
 
     private static boolean loadDataFirstTime = true;
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(removedPosition!=-1){
+            userTasksList.remove(removedPosition);
+            userTasksAdapter.notifyItemRemoved(removedPosition);
+            removedPosition = -1;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +102,14 @@ public class FacultyActivity extends AppCompatActivity {
     private void createRecyclerView() {
         //set the layout for the recycler view
         activityFacultyBinding.taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityFacultyBinding.taskRecyclerView.setHasFixedSize(true);
 
         getTasksData();
     }
 
     private UserTasksAdapter userTasksAdapter;
 
+    @SuppressLint("NotifyDataSetChanged")
     private void getTasksData(){
         if (loadDataFirstTime){
             activityFacultyBinding.progressBar.setVisibility(View.VISIBLE);
@@ -154,13 +168,17 @@ public class FacultyActivity extends AppCompatActivity {
                             UserTasks userTasks = getData(doc_snapshot, add);
                             if(userTasks!=null){
                                 if(add){
+                                    //nothing to change
+                                    //add function will only be using
+                                    //this activity only
+                                    //the tasks activity is updated
+                                    //when opened everytime
                                     userTasksList.add(0, userTasks);
                                     userTasksAdapter.notifyItemInserted(0);
                                     activityFacultyBinding.taskRecyclerView.scrollToPosition(0);
                                 }else{
                                     userTasksList.set(i, userTasks);
                                     userTasksAdapter.notifyItemChanged(i);
-                                    activityFacultyBinding.taskRecyclerView.scrollToPosition(i);
                                 }
                             }
                         }
@@ -177,10 +195,9 @@ public class FacultyActivity extends AppCompatActivity {
                         || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))
         ){
             userTasks = document.toObject(UserTasks.class);
-
+            Objects.requireNonNull(userTasks).setDocument_id(document.getId());
             int colorTask = R.color.completed;
-            if(userTasks!=null && !userTasks.isCompleted()){
-                userTasks.setDocument_id(document.getId());
+            if(!userTasks.isCompleted()){
                 try {
                     String start = userTasks.getStart_date();
                     String end = userTasks.getEnd_date();
@@ -249,5 +266,4 @@ public class FacultyActivity extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
-
 }

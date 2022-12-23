@@ -1,6 +1,7 @@
 package com.example.bfgiactivitynotifier.faculty.add_new_post;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,9 +14,12 @@ import androidx.databinding.DataBindingUtil;
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivityAddNewPostBinding;
+import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.faculty.add_new_post.models.ModelForm;
 import com.example.bfgiactivitynotifier.firebasecloudmessaging.MyFirebaseNotificationSender;
 import com.example.bfgiactivitynotifier.models.UserModel;
+import com.example.bfgiactivitynotifier.models.UserTasks;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -45,10 +49,26 @@ public class AddNewPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityAddNewPostBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_new_post);
 
+        Intent intent = getIntent();
+        int position = intent.getIntExtra("position", -1);
+
         //close activity on back button click
         activityAddNewPostBinding.backButton.setOnClickListener(view -> finish());
 
         activityAddNewPostBinding.setModelObject(modelForm);
+
+        if(position!=-1){
+            UserTasks userTasks = FacultyActivity.userTasksList.get(position);
+            activityAddNewPostBinding.taskPlanAuthority.setText(userTasks.getTask_plan_authority());
+            activityAddNewPostBinding.nameOfTask.setText(userTasks.getTask_name());
+            activityAddNewPostBinding.typeOfTask.setText(userTasks.getTask_type());
+            activityAddNewPostBinding.actionTaker.setText(userTasks.getAction_taker());
+            activityAddNewPostBinding.followUpTakenBy.setText(userTasks.getFollow_up_taken_by());
+            modelForm.setStart_date(userTasks.getStart_date());
+            modelForm.setEnd_date(userTasks.getEnd_date());
+
+            activityAddNewPostBinding.publishButton.setText(R.string.save_changes);
+        }
 
         fetchFacultyDataFromDB();
 
@@ -69,7 +89,13 @@ public class AddNewPostActivity extends AppCompatActivity {
             removeFocus();
         });
 
-        activityAddNewPostBinding.publishButton.setOnClickListener(view -> publishEvent());
+        activityAddNewPostBinding.publishButton.setOnClickListener(view -> {
+            if(position==-1){
+                publishEvent("added", position, "NEW");
+            }else{
+                publishEvent("updated", position, "UPDATE");
+            }
+        });
     }
 
     private void setAutoCompleteForFollowUp() {
@@ -145,7 +171,7 @@ public class AddNewPostActivity extends AppCompatActivity {
     //add the task to database and send as a push
     //notification of the new task/activity/work
     @SuppressLint("NotifyDataSetChanged")
-    private void publishEvent(){
+    private void publishEvent(String operation, int isNew, String dataType){
         activityAddNewPostBinding.publishButton.setEnabled(false);
         //get all the data
         String auth = activityAddNewPostBinding.taskPlanAuthority.getText().toString();
@@ -162,32 +188,49 @@ public class AddNewPostActivity extends AppCompatActivity {
 
             //add data to firebase fire store in the activities_data collection
             //store the dat into a map of type <string, string>
-            DocumentReference documentReference = firebaseFirestore.collection("activities_data").document();
-            Map<String, Object> docData = addData(auth, task, type, resp, follow, start, end);
-            documentReference.set(docData).
-                    addOnCompleteListener(this, task1 -> {
-                        if(task1.isSuccessful()){
-                            Toast.makeText(this, "Activity added successfully!", Toast.LENGTH_SHORT).show();
-                            //send push notification to all the user about event
-                            String topic = resp+CommonClass.modelUserData.getDepartment();
-                            MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Task Notifier", task, topic, getApplicationContext());
-                            myFirebaseNotificationSender.sendNotification("NEW");
-                            finish();
-                        }
-                        activityAddNewPostBinding.publishButton.setEnabled(true);
-                    })
-                    .addOnFailureListener(this, e -> {
-                        activityAddNewPostBinding.publishButton.setEnabled(true);
-                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    });
+
+            if(isNew==-1){
+                Map<String, Object> docData = addData(auth, task, type, resp, follow, start, end, true);
+                DocumentReference documentReference = firebaseFirestore.collection("activities_data").document();
+                documentReference.set(docData).
+                        addOnCompleteListener(this, task1 -> checkCompletion(task1, operation, resp, task, dataType))
+                        .addOnFailureListener(this, e -> {
+                            activityAddNewPostBinding.publishButton.setEnabled(true);
+                            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            }else{
+                Map<String, Object> docData = addData(auth, task, type, resp, follow, start, end, false);
+                DocumentReference documentReference = firebaseFirestore.collection("activities_data").document(
+                        FacultyActivity.userTasksList.get(isNew).getDocument_id()
+                );
+
+                documentReference.update(docData).
+                        addOnCompleteListener(this, task12 -> checkCompletion(task12, operation, resp, task, dataType))
+                        .addOnFailureListener(this, e -> {
+                            activityAddNewPostBinding.publishButton.setEnabled(true);
+                            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            }
         }else{
             Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
             activityAddNewPostBinding.publishButton.setEnabled(true);
         }
     }
 
+    private void checkCompletion(Task<Void> task1, String operation, String resp, String task, String dataType) {
+        if(task1.isSuccessful()){
+            Toast.makeText(this, "Task "+operation+" successfully!", Toast.LENGTH_SHORT).show();
+            //send push notification to all the user about event
+            String topic = resp+CommonClass.modelUserData.getDepartment();
+            MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Task Notifier", task, topic, getApplicationContext());
+            myFirebaseNotificationSender.sendNotification(dataType);
+            finish();
+        }
+        activityAddNewPostBinding.publishButton.setEnabled(true);
+    }
+
     private HashMap<String, Object> addData(
-            String s1, String s2, String s3, String s4, String s5, String s6, String s7
+            String s1, String s2, String s3, String s4, String s5, String s6, String s7, boolean isNew
     ){
         HashMap<String, Object> docData = new HashMap<>();
 
@@ -201,12 +244,13 @@ public class AddNewPostActivity extends AppCompatActivity {
         docData.put("end_date", s7);
 
         //additional information
-        docData.put("added_on", new Timestamp(new Date()));
-        docData.put("added_by", FirebaseAuth.getInstance().getUid());
         docData.put("last_updated", new Timestamp(new Date()));
-        docData.put("completed", false);
-
-        docData.put("department", CommonClass.modelUserData.getDepartment());
+        if(isNew){
+            docData.put("added_on", new Timestamp(new Date()));
+            docData.put("added_by", FirebaseAuth.getInstance().getUid());
+            docData.put("completed", false);
+            docData.put("department", CommonClass.modelUserData.getDepartment());
+        }
 
         return docData;
     }

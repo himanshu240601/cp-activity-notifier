@@ -1,12 +1,12 @@
 package com.example.bfgiactivitynotifier.faculty.tasks_activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.databinding.ActivityTasksBinding;
@@ -16,22 +16,47 @@ import com.example.bfgiactivitynotifier.models.UserTasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TasksActivity extends AppCompatActivity {
 
-    private ActivityTasksBinding activityTasksBinding;
+    public static int changedPosition = -1;
+    private UserTasksAdapter userTasksAdapter;
 
-    private final List<UserTasks> list = new ArrayList<>();
+    public static final List<UserTasks> list = new ArrayList<>();
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        checkFunction(FacultyActivity.userTasksList.get(changedPosition).getDocument_id());
+    }
+
+    public void checkFunction(String document_id) {
+        if (changedPosition != -1) {
+
+            for (int j = 0; j < list.size(); j++) {
+                if (Objects.equals(list.get(j).getDocument_id(), document_id)) {
+                    list.set(j, FacultyActivity.userTasksList.get(changedPosition));
+                    userTasksAdapter.notifyItemChanged(j);
+                    break;
+                }
+            }
+
+            changedPosition = -1;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityTasksBinding = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
+        ActivityTasksBinding activityTasksBinding = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
         //set text for top bar
+        list.clear();
         Intent intent = getIntent();
         String text = intent.getStringExtra("textOnAction");
         activityTasksBinding.actionBarText.setText(text);
 
-        activityTasksBinding.backButton.setOnClickListener(view-> finish());
+        activityTasksBinding.backButton.setOnClickListener(view-> onBackPressed());
 
         activityTasksBinding.progressBar.setVisibility(View.VISIBLE);
         if(text.equals("My Tasks")){
@@ -48,12 +73,18 @@ public class TasksActivity extends AppCompatActivity {
             activityTasksBinding.noTasks.setVisibility(View.GONE);
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.VISIBLE);
 
-            UserTasksAdapter userTasksAdapter = new UserTasksAdapter(list, this, true);
+            userTasksAdapter = new UserTasksAdapter(list, this, true, this);
             activityTasksBinding.recyclerViewAllTasks.setLayoutManager(new LinearLayoutManager(this));
             activityTasksBinding.recyclerViewAllTasks.setAdapter(userTasksAdapter);
         }else{
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.GONE);
             activityTasksBinding.noTasks.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        list.clear();
     }
 }

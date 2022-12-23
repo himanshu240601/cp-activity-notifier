@@ -40,47 +40,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/openNotificationsSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_card_rounded"
-            android:backgroundTint="#05000000"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="12dp"
-            android:padding="16dp">
-
-            <ImageView
-                android:id="@+id/icon1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_notification"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                app:tint="?attr/colorControlNormal"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:layout_toEndOf="@id/icon1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/notifications"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/next1"
-                android:layout_marginStart="12dp"/>
-
-            <ImageView
-                android:id="@+id/next1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_right"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                app:tint="?attr/colorControlNormal"
-                tools:ignore="ContentDescription" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/openAboutSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.bfgiactivitynotifier.common.CommonClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +27,7 @@ public class MyFirebaseNotificationSender {
     private String serverKey = "key=";
 
     public MyFirebaseNotificationSender(String NOTIFICATION_TITLE, String NOTIFICATION_MESSAGE, String NOTIFICATION_TOPIC, Context context) {
-        this.NOTIFICATION_TITLE = NOTIFICATION_TITLE;
+        this.NOTIFICATION_TITLE = NOTIFICATION_TITLE+"-"+CommonClass.modelUserData.getUser_id();
         this.NOTIFICATION_MESSAGE = NOTIFICATION_MESSAGE;
         this.NOTIFICATION_TOPIC = NOTIFICATION_TOPIC.replaceAll(" ","_");
         this.context = context;

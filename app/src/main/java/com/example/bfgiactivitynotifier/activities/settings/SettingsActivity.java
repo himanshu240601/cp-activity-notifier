@@ -25,7 +25,6 @@ public class SettingsActivity extends AppCompatActivity {
         activitySettingsBinding.logOut.setOnClickListener(view -> new AlertDialog.Builder(this)
                 .setTitle("Log Out")
                 .setMessage("Do you really want to logout?")
-                .setIcon(R.drawable.icon_about)
                 .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
                     SharedPreferences sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
                     sharedPreferences.edit().clear().apply();
