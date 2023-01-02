@@ -1,8 +1,12 @@
 package com.example.bfgiactivitynotifier.faculty.tasks_activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -46,10 +50,12 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
+    private ActivityTasksBinding activityTasksBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityTasksBinding activityTasksBinding = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
+        activityTasksBinding = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
         //set text for top bar
         list.clear();
         Intent intent = getIntent();
@@ -57,6 +63,8 @@ public class TasksActivity extends AppCompatActivity {
         activityTasksBinding.actionBarText.setText(text);
 
         activityTasksBinding.backButton.setOnClickListener(view-> onBackPressed());
+
+        activityTasksBinding.sortButton.setOnClickListener(view-> showSortByPopUp());
 
         activityTasksBinding.progressBar.setVisibility(View.VISIBLE);
         if(text.equals("My Tasks")){
@@ -80,6 +88,26 @@ public class TasksActivity extends AppCompatActivity {
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.GONE);
             activityTasksBinding.noTasks.setVisibility(View.VISIBLE);
         }
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void showSortByPopUp() {
+        PopupMenu popupMenu = new PopupMenu(this, activityTasksBinding.sortButton);
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()){
+                case R.id.sortByLatest:
+                    Toast.makeText(this, "sort by latest", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.sortByOldest:
+                    Toast.makeText(this, "sort by oldest", Toast.LENGTH_SHORT).show();
+                    return true;
+            }
+            return false;
+        });
+
+        popupMenu.inflate(R.menu.sort_by);
+        popupMenu.setGravity(Gravity.END);
+        popupMenu.show();
     }
 
     @Override

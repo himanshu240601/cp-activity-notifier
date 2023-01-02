@@ -89,4 +89,7 @@
     <string name="mark_as_completed">Mark as Completed</string>
     <string name="save_changes">Save Changes</string>
     <string name="please_specify_a_reason_for_change_in_this_task_not_mandatory">*please specify a reason for change in this task (not mandatory)</string>
+    <string name="sort">Sort by</string>
+    <string name="latest">Latest</string>
+    <string name="oldest">Oldest</string>
 </resources>

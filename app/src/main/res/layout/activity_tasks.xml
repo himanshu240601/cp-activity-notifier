@@ -41,6 +41,24 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp">
+
+            <TextView
+                android:id="@+id/sortButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sort"
+                android:textSize="14sp"
+                android:layout_alignParentEnd="true"
+                android:padding="12dp"
+                android:drawablePadding="4dp"
+                app:drawableEndCompat="@drawable/icon_triangle_bottom" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
