@@ -31,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -132,6 +133,9 @@ public class FacultyActivity extends AppCompatActivity {
                             activityFacultyBinding.noTasks.setVisibility(View.GONE);
                             activityFacultyBinding.taskRecyclerView.setVisibility(View.VISIBLE);
                             //initialize the adapter class
+
+                            userTasksList.sort((o1, o2) -> o2.getAdded_on().compareTo(o1.getAdded_on()));
+
                             userTasksAdapter = new UserTasksAdapter(userTasksList, this, false);
 
                             //set the adapter for the recycler view

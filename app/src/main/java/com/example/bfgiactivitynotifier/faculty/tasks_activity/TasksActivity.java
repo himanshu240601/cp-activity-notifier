@@ -13,12 +13,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bfgiactivitynotifier.R;
+import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivityTasksBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.faculty.adapters.UserTasksAdapter;
 import com.example.bfgiactivitynotifier.models.UserTasks;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,20 +53,26 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     private ActivityTasksBinding activityTasksBinding;
+    private String text = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityTasksBinding = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
-        //set text for top bar
+
         list.clear();
+
+        //set text for top bar
         Intent intent = getIntent();
-        String text = intent.getStringExtra("textOnAction");
+        text = intent.getStringExtra("textOnAction");
         activityTasksBinding.actionBarText.setText(text);
 
+        //finish activity on back pressed
         activityTasksBinding.backButton.setOnClickListener(view-> onBackPressed());
 
+        //open popup dialog to select sorting method for the list
         activityTasksBinding.sortButton.setOnClickListener(view-> showSortByPopUp());
+        activityTasksBinding.filterButton.setOnClickListener(view-> showFilterPopUp());
 
         activityTasksBinding.progressBar.setVisibility(View.VISIBLE);
         if(text.equals("My Tasks")){
@@ -85,20 +93,70 @@ public class TasksActivity extends AppCompatActivity {
             activityTasksBinding.recyclerViewAllTasks.setLayoutManager(new LinearLayoutManager(this));
             activityTasksBinding.recyclerViewAllTasks.setAdapter(userTasksAdapter);
         }else{
+            activityTasksBinding.sortButton.setVisibility(View.GONE);
+            activityTasksBinding.filterButton.setVisibility(View.GONE);
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.GONE);
             activityTasksBinding.noTasks.setVisibility(View.VISIBLE);
         }
     }
 
     @SuppressLint("NonConstantResourceId")
+    private void showFilterPopUp() {
+        PopupMenu popupMenu = new PopupMenu(this, activityTasksBinding.filterButton);
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.showAllTasks:
+                    filterData("all");
+                    Toast.makeText(this, "All Tasks", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.addedByMe:
+                    filterData("user");
+                    Toast.makeText(this, "Added by You", Toast.LENGTH_SHORT).show();
+                    return true;
+            }
+            return false;
+        });
+        popupMenu.inflate(R.menu.filter);
+        popupMenu.setGravity(Gravity.END);
+        popupMenu.show();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void filterData(String all) {
+        list.clear();
+        if(all.equals("user")){
+            for(UserTasks userTasks : FacultyActivity.userTasksList){
+                if(userTasks.getAdded_by_name().equals(CommonClass.modelUserData.getFull_name())){
+                    list.add(userTasks);
+                }
+            }
+        }else{
+            if(text.equals("My Tasks")){
+                list.addAll(FacultyActivity.userTasksList);
+            }else{
+                for(UserTasks userTasks : FacultyActivity.userTasksList){
+                    if(userTasks.getStatus().equals(text)){
+                        list.add(userTasks);
+                    }
+                }
+            }
+        }
+        userTasksAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
     private void showSortByPopUp() {
         PopupMenu popupMenu = new PopupMenu(this, activityTasksBinding.sortButton);
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()){
                 case R.id.sortByLatest:
+                    list.sort((o1, o2) -> o2.getAdded_on().compareTo(o1.getAdded_on()));
+                    userTasksAdapter.notifyDataSetChanged();
                     Toast.makeText(this, "sort by latest", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.sortByOldest:
+                    list.sort(Comparator.comparing(UserTasks::getAdded_on));
+                    userTasksAdapter.notifyDataSetChanged();
                     Toast.makeText(this, "sort by oldest", Toast.LENGTH_SHORT).show();
                     return true;
             }

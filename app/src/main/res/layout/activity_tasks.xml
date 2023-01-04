@@ -50,6 +50,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sort"
                 android:textSize="14sp"
+                android:layout_toStartOf="@+id/filterButton"
+                android:padding="12dp"
+                android:drawablePadding="4dp"
+                app:drawableEndCompat="@drawable/icon_triangle_bottom" />
+
+            <TextView
+                android:id="@+id/filterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter"
+                android:textSize="14sp"
                 android:layout_alignParentEnd="true"
                 android:padding="12dp"
                 android:drawablePadding="4dp"

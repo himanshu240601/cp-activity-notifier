@@ -92,4 +92,7 @@
     <string name="sort">Sort by</string>
     <string name="latest">Latest</string>
     <string name="oldest">Oldest</string>
+    <string name="added_by_me">Added by Me</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="filter">Filter</string>
 </resources>
