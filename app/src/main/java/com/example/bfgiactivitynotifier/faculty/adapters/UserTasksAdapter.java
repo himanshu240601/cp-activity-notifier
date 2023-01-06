@@ -61,7 +61,16 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
         holder.tasksCardBinding.setTaskObject(userTasksListAdapter.get(position));
 
         //set margin of the last card
-        if(userTasksListAdapter.size()!=1 && position== userTasksListAdapter.size()-1){
+        if(userTasksListAdapter.size()!=0 && holder.getAbsoluteAdapterPosition()==0){
+            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
+                    RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(8, 8, 8, 8);
+            holder.tasksCardBinding.linearLayout.setLayoutParams(params);
+        }
+
+        if(userTasksListAdapter.size()!=1 && holder.getAbsoluteAdapterPosition()==userTasksListAdapter.size()-1){
             RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
                     RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT

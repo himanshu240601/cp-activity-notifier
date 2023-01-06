@@ -16,6 +16,7 @@ import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivitySignInBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.models.UserModel;
+import com.example.bfgiactivitynotifier.signin.register.SignupActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,6 +38,11 @@ public class SignInActivity extends AppCompatActivity {
 
         //assign the binding class object
         activitySignInBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
+
+        activitySignInBinding.signUp.setOnClickListener(view-> {
+            startActivity(new Intent(this, SignupActivity.class));
+            finish();
+        });
 
         //drawables for the password toggle component
         //eye - when password is not visible, show it on click

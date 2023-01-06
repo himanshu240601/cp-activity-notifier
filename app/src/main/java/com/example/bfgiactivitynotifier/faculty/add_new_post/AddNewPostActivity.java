@@ -102,7 +102,8 @@ public class AddNewPostActivity extends AppCompatActivity {
     }
 
     private void setAutoCompleteForFollowUp() {
-        followUpTakenBy.add("HOD CSE");
+        followUpTakenBy.add("HOD");
+        followUpTakenBy.add("Principal");
         ArrayAdapter<String> adapter1=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,followUpTakenBy);
         activityAddNewPostBinding.followUpTakenBy.setAdapter(adapter1);
     }

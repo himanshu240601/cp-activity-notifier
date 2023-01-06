@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
-            android:text="@string/welcome_back_you_ve_been_missed"
+            android:text="@string/welcome_create_a_new_account"
             android:layout_marginTop="4dp"
             android:textSize="18sp"/>
 
@@ -31,12 +31,12 @@
             android:id="@+id/editTextMobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_your_mobile"
+            android:hint="@string/mobile_no"
             android:inputType="number"
             android:maxLength="10"
             android:textSize="14sp"
             android:padding="16dp"
-            android:drawableStart="@drawable/sign_in_user"
+            android:drawableStart="@drawable/icon_phone"
             android:drawableTint="?attr/colorControlNormal"
             android:drawablePadding="14dp"
             android:layout_below="@id/subtitle"
@@ -44,10 +44,55 @@
             tools:ignore="Autofill" />
 
         <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:padding="16dp"
+            android:drawableStart="@drawable/sign_in_user"
+            android:drawableTint="?attr/colorControlNormal"
+            android:drawablePadding="14dp"
+            android:layout_below="@id/editTextMobile"
+            android:layout_marginTop="16dp"
+            tools:ignore="Autofill" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editTextDepartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/department"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:padding="16dp"
+            android:drawableStart="@drawable/icon_department"
+            android:drawableTint="?attr/colorControlNormal"
+            android:drawablePadding="14dp"
+            android:completionThreshold="1"
+            android:layout_below="@id/editTextName"
+            android:layout_marginTop="16dp"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/editTextDesignation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/user_designation"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:padding="16dp"
+            android:completionThreshold="1"
+            android:drawableStart="@drawable/icon_work"
+            android:drawableTint="?attr/colorControlNormal"
+            android:drawablePadding="14dp"
+            android:layout_below="@id/editTextDepartment"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_your_password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:maxLength="16"
             android:textSize="14sp"
@@ -57,7 +102,7 @@
             android:drawablePadding="14dp"
             android:layout_marginTop="16dp"
             android:importantForAutofill="no"
-            android:layout_below="@id/editTextMobile"/>
+            android:layout_below="@id/editTextDesignation"/>
 
         <ImageButton
             android:id="@+id/password_toggle"
@@ -77,14 +122,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/sign_in"
+            android:text="@string/sign_up"
             android:textAllCaps="false"
             android:padding="14dp"
             android:layout_below="@id/editTextPassword"
             android:contentDescription="@string/sign_in"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/signUp"
+            android:id="@+id/signIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -96,11 +141,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/don_t_have_an_account"/>
+                android:text="@string/already_have_an_account"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up"
+                android:text="@string/sign_in"
                 android:layout_marginStart="4dp"
                 android:textColor="?attr/colorPrimary"/>
 

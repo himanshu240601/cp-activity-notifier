@@ -31,7 +31,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -214,7 +213,12 @@ public class FacultyActivity extends AppCompatActivity {
     private UserTasks getData(DocumentSnapshot document) {
         UserTasks userTasks = null;
         if(
-                (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
+          (
+                  (CommonClass.modelUserData.getDesignation().equals("Principal") || CommonClass.modelUserData.getDesignation().equals("HOD"))
+                  && (Objects.equals(document.get("department"),CommonClass.modelUserData.getDepartment()))
+          )
+
+                        || (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
                         || Objects.equals(document.get("action_taker"), "All Faculty")
                         || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
                         || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))

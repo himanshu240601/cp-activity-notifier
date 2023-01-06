@@ -13,6 +13,7 @@ import com.example.bfgiactivitynotifier.R;
 import com.example.bfgiactivitynotifier.activities.profile.ProfileActivity;
 import com.example.bfgiactivitynotifier.databinding.ActivitySettingsBinding;
 import com.example.bfgiactivitynotifier.signin.SignInActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
 

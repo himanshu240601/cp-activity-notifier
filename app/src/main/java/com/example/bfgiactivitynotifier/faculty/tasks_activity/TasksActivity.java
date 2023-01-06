@@ -34,7 +34,9 @@ public class TasksActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        checkFunction(FacultyActivity.userTasksList.get(changedPosition).getDocument_id());
+        if(changedPosition!=-1){
+            checkFunction(FacultyActivity.userTasksList.get(changedPosition).getDocument_id());
+        }
     }
 
     public void checkFunction(String document_id) {
@@ -61,6 +63,9 @@ public class TasksActivity extends AppCompatActivity {
         activityTasksBinding = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
 
         list.clear();
+
+        activityTasksBinding.sortButton.setVisibility(View.GONE);
+        activityTasksBinding.filterButton.setVisibility(View.GONE);
 
         //set text for top bar
         Intent intent = getIntent();
@@ -93,8 +98,8 @@ public class TasksActivity extends AppCompatActivity {
             activityTasksBinding.recyclerViewAllTasks.setLayoutManager(new LinearLayoutManager(this));
             activityTasksBinding.recyclerViewAllTasks.setAdapter(userTasksAdapter);
         }else{
-            activityTasksBinding.sortButton.setVisibility(View.GONE);
-            activityTasksBinding.filterButton.setVisibility(View.GONE);
+//            activityTasksBinding.sortButton.setVisibility(View.GONE);
+//            activityTasksBinding.filterButton.setVisibility(View.GONE);
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.GONE);
             activityTasksBinding.noTasks.setVisibility(View.VISIBLE);
         }
@@ -126,7 +131,7 @@ public class TasksActivity extends AppCompatActivity {
         list.clear();
         if(all.equals("user")){
             for(UserTasks userTasks : FacultyActivity.userTasksList){
-                if(userTasks.getAdded_by_name().equals(CommonClass.modelUserData.getFull_name())){
+                if(userTasks.getStatus().equals(text) && userTasks.getAdded_by_name().equals(CommonClass.modelUserData.getFull_name())){
                     list.add(userTasks);
                 }
             }
