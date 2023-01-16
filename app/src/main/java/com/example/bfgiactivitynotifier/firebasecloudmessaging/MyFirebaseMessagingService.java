@@ -34,11 +34,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     public void getFirebaseMessage(String title, String message){
-        String[] title_notify = title.split("-");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CH_FIREBASE")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.app_logo)
-                .setContentTitle(title_notify[0])
+                .setContentTitle("Task Notifier")
                 .setContentText(message)
                 .setAutoCancel(true);
 
