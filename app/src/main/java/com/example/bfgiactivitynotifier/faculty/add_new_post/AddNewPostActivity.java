@@ -25,8 +25,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ public class AddNewPostActivity extends AppCompatActivity {
     private final ArrayList<String> taskType = new ArrayList<>();
     private final ArrayList<String> followUpTakenBy = new ArrayList<>();
 
+    private final ArrayList<String> delayReason = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +72,10 @@ public class AddNewPostActivity extends AppCompatActivity {
             activityAddNewPostBinding.followUpTakenBy.setText(userTasks.getFollow_up_taken_by());
             modelForm.setStart_date(userTasks.getStart_date());
             modelForm.setEnd_date(userTasks.getEnd_date());
+
+            if(userTasks.getDelay_reason()!=null && userTasks.getDelay_reason().isEmpty()){
+                delayReason.addAll(userTasks.getDelay_reason());
+            }
 
             activityAddNewPostBinding.publishButton.setText(R.string.save_changes);
         }
@@ -255,10 +262,8 @@ public class AddNewPostActivity extends AppCompatActivity {
             docData.put("completed", false);
             docData.put("department", CommonClass.modelUserData.getDepartment());
         }else{
-            String reason = Objects.requireNonNull(activityAddNewPostBinding.delayReason.getText()).toString();
-            if(!reason.isEmpty()){
-                docData.put("delay_reason", reason);
-            }
+            delayReason.add(" • "+CommonClass.modelUserData.getDate()+ " : "+Objects.requireNonNull(activityAddNewPostBinding.delayReason.getText()));
+            docData.put("delay_reason", FieldValue.arrayUnion(delayReason.get(delayReason.size()-1)));
         }
 
         return docData;

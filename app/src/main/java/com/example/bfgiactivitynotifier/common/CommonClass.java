@@ -53,4 +53,36 @@ public class CommonClass {
         }
         return "";
     }
+
+    public static boolean checkDateRange(String start_date, String end_date) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+        try {
+            Date start = format.parse(start_date);
+            Date end = format.parse(end_date);
+            @SuppressLint("SimpleDateFormat") Date current =
+                    format.parse(
+                            new SimpleDateFormat("dd MMM yyyy").format(Calendar.getInstance().getTime())
+                    );
+
+            Calendar cal = Calendar.getInstance();
+            if (current != null) {
+                cal.setTime(current);
+                cal.add(Calendar.DATE, 7);
+            }
+            Date seven_days = format.parse(format.format(cal.getTime()));
+
+            if(start!=null && start.compareTo(current)>0 && start.compareTo(seven_days)<=0){
+                return true;
+            }
+
+            if(end!=null && end.compareTo(current)>0 && end.compareTo(seven_days)<=0){
+                return true;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
 }

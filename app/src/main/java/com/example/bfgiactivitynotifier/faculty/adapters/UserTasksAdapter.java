@@ -24,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -82,7 +83,7 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
         holder.tasksCardBinding.linearLayout.setOnClickListener(view-> openBottomSheetDialog(holder.getAbsoluteAdapterPosition()));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     private void openBottomSheetDialog(int pos) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
@@ -109,9 +110,21 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
 
         }
 
-        if(userTasksListAdapter.get(pos).getDelay_reason()!=null){
+        if(userTasksListAdapter.get(pos).getDelay_reason()!=null && !userTasksListAdapter.get(pos).getDelay_reason().isEmpty()){
             taskBottomSheetBinding.reasonTopBorder.setVisibility(View.VISIBLE);
             taskBottomSheetBinding.resonOfDelay.setVisibility(View.VISIBLE);
+            taskBottomSheetBinding.resonOfDelayText.setVisibility(View.VISIBLE);
+            ArrayList<String> reasons = userTasksListAdapter.get(pos).getDelay_reason();
+            StringBuilder delays = new StringBuilder();
+            for (String rea:
+                 reasons) {
+                if(rea.equals(reasons.get(reasons.size()-1))){
+                    delays.append(rea);
+                }else{
+                    delays.append(rea).append("\n");
+                }
+            }
+            taskBottomSheetBinding.resonOfDelayText.setText(delays);
         }
 
         taskBottomSheetBinding.editTask.setOnClickListener(view-> {

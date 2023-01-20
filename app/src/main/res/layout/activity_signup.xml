@@ -43,20 +43,38 @@
             android:layout_marginTop="32dp"
             tools:ignore="Autofill" />
 
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/name"
-            android:inputType="text"
-            android:textSize="14sp"
-            android:padding="16dp"
-            android:drawableStart="@drawable/sign_in_user"
-            android:drawableTint="?attr/colorControlNormal"
-            android:drawablePadding="14dp"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayout"
             android:layout_below="@id/editTextMobile"
             android:layout_marginTop="16dp"
-            tools:ignore="Autofill" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <AutoCompleteTextView
+                android:id="@+id/editTextNamePrefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/prefix"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:padding="16dp"
+                android:drawableStart="@drawable/sign_in_user"
+                android:drawableTint="?attr/colorControlNormal"
+                android:drawablePadding="14dp"
+                tools:ignore="Autofill" />
+
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:padding="18dp"
+                tools:ignore="Autofill" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <AutoCompleteTextView
             android:id="@+id/editTextDepartment"
@@ -69,8 +87,7 @@
             android:drawableStart="@drawable/icon_department"
             android:drawableTint="?attr/colorControlNormal"
             android:drawablePadding="14dp"
-            android:completionThreshold="1"
-            android:layout_below="@id/editTextName"
+            android:layout_below="@id/linearLayout"
             android:layout_marginTop="16dp"/>
 
         <AutoCompleteTextView
@@ -81,7 +98,6 @@
             android:inputType="text"
             android:textSize="14sp"
             android:padding="16dp"
-            android:completionThreshold="1"
             android:drawableStart="@drawable/icon_work"
             android:drawableTint="?attr/colorControlNormal"
             android:drawablePadding="14dp"

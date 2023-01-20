@@ -212,8 +212,9 @@ public class FacultyActivity extends AppCompatActivity {
 
     private UserTasks getData(DocumentSnapshot document) {
         UserTasks userTasks = null;
-        if(
-                CommonClass.modelUserData.getDepartment().equals(document.get("department")) &&
+        if(     CommonClass.checkDateRange(Objects.requireNonNull(document.get("start_date")).toString(), Objects.requireNonNull(document.get("end_date")).toString())
+                &&
+                (CommonClass.modelUserData.getDepartment().equals(document.get("department")) &&
                 ((
                         (CommonClass.modelUserData.getDesignation().equals("Principal") || CommonClass.modelUserData.getDesignation().equals("HOD"))
                                 && (Objects.equals(document.get("department"),CommonClass.modelUserData.getDepartment()))
@@ -222,7 +223,7 @@ public class FacultyActivity extends AppCompatActivity {
                         || (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
                         || Objects.equals(document.get("action_taker"), "All Faculty")
                         || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
-                        || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())))
+                        || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))))
         ){
             userTasks = document.toObject(UserTasks.class);
             Objects.requireNonNull(userTasks).setDocument_id(document.getId());

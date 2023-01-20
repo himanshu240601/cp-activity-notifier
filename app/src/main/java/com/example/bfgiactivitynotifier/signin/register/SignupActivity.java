@@ -1,14 +1,16 @@
 package com.example.bfgiactivitynotifier.signin.register;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -19,7 +21,6 @@ import com.example.bfgiactivitynotifier.databinding.ActivitySignupBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.models.UserModel;
 import com.example.bfgiactivitynotifier.signin.SignInActivity;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private final CommonClass commonClass = new CommonClass();
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,19 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         setUpAutoCompleteEditText();
+
+        activitySignupBinding.editTextNamePrefix.setOnTouchListener((v, event) -> {
+            activitySignupBinding.editTextNamePrefix.showDropDown();
+            return false;
+        });
+        activitySignupBinding.editTextDepartment.setOnTouchListener((v, event) -> {
+            activitySignupBinding.editTextDepartment.showDropDown();
+            return false;
+        });
+        activitySignupBinding.editTextDesignation.setOnTouchListener((v, event) -> {
+            activitySignupBinding.editTextDesignation.showDropDown();
+            return false;
+        });
 
         //drawables for the password toggle component
         //eye - when password is not visible, show it on click
@@ -69,15 +84,16 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         activitySignupBinding.buttonSignIn.setOnClickListener(v -> {
-            String mobile = activitySignupBinding.editTextMobile.getText().toString();
-            String name = activitySignupBinding.editTextName.getText().toString();
-            String department = activitySignupBinding.editTextDepartment.getText().toString();
-            String designation = activitySignupBinding.editTextDesignation.getText().toString();
-            String key = activitySignupBinding.editTextPassword.getText().toString();
+            String mobile = activitySignupBinding.editTextMobile.getText().toString().trim();
+            String name = activitySignupBinding.editTextName.getText().toString().trim();
+            String name_pre = activitySignupBinding.editTextNamePrefix.getText().toString().trim();
+            String department = activitySignupBinding.editTextDepartment.getText().toString().trim();
+            String designation = activitySignupBinding.editTextDesignation.getText().toString().trim();
+            String key = activitySignupBinding.editTextPassword.getText().toString().trim();
             if(validateForm(mobile, name, department, designation, key)){
                 activitySignupBinding.buttonSignIn.setEnabled(false);
                 clearFocus();
-                createUser(mobile+"@bfgi.com", "Er. "+name, department, designation, key);
+                createUser(mobile+"@bfgi.com", name_pre+" "+name, department, designation, key);
             }
         });
     }
@@ -174,17 +190,25 @@ public class SignupActivity extends AppCompatActivity {
     private void setUpAutoCompleteEditText() {
         department.add("B.Tech CSE");
         department.add("B.Tech CE");
-        department.add("B.Tech CIVIL");
+        department.add("B.Tech ME");
         department.add("B.Tech EE");
         ArrayAdapter<String> department_adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,department);
         activitySignupBinding.editTextDepartment.setAdapter(department_adapter);
 
         designation.add("Principal");
+        designation.add("Dean");
         designation.add("HOD");
-        designation.add("Professor");
-        designation.add("Assistant Professor");
+        designation.add("Faculty");
         ArrayAdapter<String> designation_adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,designation);
         activitySignupBinding.editTextDesignation.setAdapter(designation_adapter);
+
+        ArrayList<String> name_prefix = new ArrayList<>();
+        name_prefix.add("Er.");
+        name_prefix.add("Dr.");
+        name_prefix.add("Ms.");
+        name_prefix.add("Mr.");
+        ArrayAdapter<String> prefix_adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,name_prefix);
+        activitySignupBinding.editTextNamePrefix.setAdapter(prefix_adapter);
     }
 
     //function to toggle the password visibility

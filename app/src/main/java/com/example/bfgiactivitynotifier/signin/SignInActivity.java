@@ -68,8 +68,8 @@ public class SignInActivity extends AppCompatActivity {
             activitySignInBinding.editTextMobile.clearFocus();
             activitySignInBinding.editTextPassword.clearFocus();
             //get the values of text fields
-            String id = activitySignInBinding.editTextMobile.getText().toString();
-            String key = activitySignInBinding.editTextPassword.getText().toString();
+            String id = activitySignInBinding.editTextMobile.getText().toString().trim();
+            String key = activitySignInBinding.editTextPassword.getText().toString().trim();
 
             //check if the values entered are correct
             //and not empty or contains some unwanted keywords

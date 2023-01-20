@@ -105,4 +105,6 @@
     <string name="password">Password</string>
     <string name="user_designation">Designation</string>
     <string name="mobile_no">Mobile No.</string>
+    <string name="reason_of_delay">Reason of Delay</string>
+    <string name="prefix">Prefix</string>
 </resources>
