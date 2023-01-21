@@ -107,4 +107,9 @@
     <string name="mobile_no">Mobile No.</string>
     <string name="reason_of_delay">Reason of Delay</string>
     <string name="prefix">Prefix</string>
+    <string name="task_change_requests">Task Change Requests</string>
+    <string name="s_wants_to_modify_s_task">%s wants to modify \'%s\' task.</string>
+    <string name="reason_for_change_s">Reason for change : %s</string>
+    <string name="decline">Decline</string>
+    <string name="approve">Approve</string>
 </resources>

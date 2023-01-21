@@ -90,6 +90,36 @@
 
             </RelativeLayout>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/taskRequests"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="16dp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_card_rounded"
+                android:backgroundTint="#F1F1F1">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task_change_requests"/>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    app:drawableEndCompat="@drawable/icon_right"
+                    app:drawableTint="?attr/colorControlNormal" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

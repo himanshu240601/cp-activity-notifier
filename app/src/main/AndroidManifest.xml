@@ -15,6 +15,9 @@
         android:theme="@style/Theme.BfgiActivityNotifier"
         tools:targetApi="31">
         <activity
+            android:name=".faculty.tasks_activity.RequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".signin.register.SignupActivity"
             android:exported="false">
             <meta-data

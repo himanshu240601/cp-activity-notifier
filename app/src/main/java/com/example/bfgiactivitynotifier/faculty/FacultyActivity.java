@@ -20,6 +20,7 @@ import com.example.bfgiactivitynotifier.databinding.ActivityFacultyBinding;
 import com.example.bfgiactivitynotifier.faculty.adapters.UserTasksAdapter;
 import com.example.bfgiactivitynotifier.faculty.add_new_post.AddNewPostActivity;
 import com.example.bfgiactivitynotifier.faculty.models.TasksCount;
+import com.example.bfgiactivitynotifier.faculty.tasks_activity.RequestActivity;
 import com.example.bfgiactivitynotifier.faculty.tasks_activity.TasksActivity;
 import com.example.bfgiactivitynotifier.models.UserTasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,6 +68,12 @@ public class FacultyActivity extends AppCompatActivity {
         subscribeToFirebaseTopic();
 
         activityFacultyBinding.setUserObject(CommonClass.modelUserData);
+
+        if(CommonClass.modelUserData.getDesignation().equals("HOD")){
+            activityFacultyBinding.taskRequests.setVisibility(View.VISIBLE);
+        }
+
+        activityFacultyBinding.taskRequests.setOnClickListener(v -> startActivity(new Intent(FacultyActivity.this, RequestActivity.class)));
 
         createRecyclerView();
 
@@ -212,6 +219,17 @@ public class FacultyActivity extends AppCompatActivity {
 
     private UserTasks getData(DocumentSnapshot document) {
         UserTasks userTasks = null;
+//        String auth = CommonClass.modelUserData.getDesignation();
+//        if(auth.equals("faculty")) {
+//            //get data of faculty only
+//        }else if(auth.equals("HOD")){
+//            //get data of faculty only
+//        }else if(auth.equals("Dean")){
+//            //get date of hods and faculty
+//        }else{
+//            //get date of deans, hods and faculty
+//        }
+
         if(     CommonClass.checkDateRange(Objects.requireNonNull(document.get("start_date")).toString(), Objects.requireNonNull(document.get("end_date")).toString())
                 &&
                 (CommonClass.modelUserData.getDepartment().equals(document.get("department")) &&

@@ -28,7 +28,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -122,12 +121,11 @@ public class AddNewPostActivity extends AppCompatActivity {
         activityAddNewPostBinding.typeOfTask.setAdapter(adapter1);
     }
 
+    private final List<UserModel> userModels = new ArrayList<>();
     @SuppressLint("SetTextI18n")
     private void fetchFacultyDataFromDB() {
         final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = firebaseFirestore.collection("faculty_data");
-
-        List<UserModel> userModels = new ArrayList<>();
 
         collectionReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -210,17 +208,45 @@ public class AddNewPostActivity extends AppCompatActivity {
                             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         });
             }else{
-                Map<String, Object> docData = addData(auth, task, type, resp, follow, start, end, false);
-                DocumentReference documentReference = firebaseFirestore.collection("activities_data").document(
-                        FacultyActivity.userTasksList.get(isNew).getDocument_id()
-                );
+                if(Objects.equals(CommonClass.modelUserData.getDesignation(), "Faculty")){
+                    Map<String, Object> docData = new HashMap<>();
+                    docData.put("req_id", FacultyActivity.userTasksList.get(isNew).getDocument_id());
+                    docData.put("req_change", " • "+CommonClass.modelUserData.getDate()+ " : "+Objects.requireNonNull(activityAddNewPostBinding.delayReason.getText()));
 
-                documentReference.update(docData).
-                        addOnCompleteListener(this, task12 -> checkCompletion(task12, operation, resp, task, dataType))
-                        .addOnFailureListener(this, e -> {
-                            activityAddNewPostBinding.publishButton.setEnabled(true);
-                            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                    final FirebaseFirestore firebaseFirestoreAuth = FirebaseFirestore.getInstance();
+                    final CollectionReference collectionReference = firebaseFirestoreAuth.collection("faculty_data");
+
+                    collectionReference.get().addOnCompleteListener(taskHod -> {
+                        if (taskHod.isSuccessful()) {
+                            for (DocumentSnapshot document : taskHod.getResult()) {
+                                if(document.get("designation")=="HOD" && document.get("department")==CommonClass.modelUserData.getDepartment()){
+                                    collectionReference
+                                            .document(document.getId())
+                                            .collection("task_requests")
+                                            .document()
+                                            .set(docData)
+                                            .addOnCompleteListener(this, task1 -> checkCompletion(task1, operation, (String) document.get("name"), "Task Change Request - "+task, dataType))
+                                            .addOnFailureListener(this, e -> {
+                                                activityAddNewPostBinding.publishButton.setEnabled(true);
+                                                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                            });
+                                }
+                            }
+                        }
+                    });
+                }else{
+                    Map<String, Object> docData = addData(auth, task, type, resp, follow, start, end, false);
+                    DocumentReference documentReference = firebaseFirestore.collection("activities_data").document(
+                            FacultyActivity.userTasksList.get(isNew).getDocument_id()
+                    );
+
+                    documentReference.update(docData).
+                            addOnCompleteListener(this, task12 -> checkCompletion(task12, operation, resp, task, dataType))
+                            .addOnFailureListener(this, e -> {
+                                activityAddNewPostBinding.publishButton.setEnabled(true);
+                                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }
             }
         }else{
             Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
@@ -233,7 +259,8 @@ public class AddNewPostActivity extends AppCompatActivity {
             Toast.makeText(this, "Task "+operation+" successfully!", Toast.LENGTH_SHORT).show();
             //send push notification to all the user about event
             String topic = resp+CommonClass.modelUserData.getDepartment();
-            MyFirebaseNotificationSender myFirebaseNotificationSender = new MyFirebaseNotificationSender("Task Notifier", task, topic, getApplicationContext());
+            MyFirebaseNotificationSender myFirebaseNotificationSender =
+                    new MyFirebaseNotificationSender("Task Notifier", task, topic, getApplicationContext());
             myFirebaseNotificationSender.sendNotification(dataType);
             finish();
         }

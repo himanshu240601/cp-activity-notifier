@@ -42,6 +42,16 @@ public class UserTasks {
 
     private String added_by_name;
 
+    private String req_change;
+
+    public String getReq_change() {
+        return req_change;
+    }
+
+    public void setReq_change(String req_change) {
+        this.req_change = req_change;
+    }
+
     public String getAdded_by_name() {
         return added_by_name;
     }
