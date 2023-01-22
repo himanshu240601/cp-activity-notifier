@@ -121,8 +121,6 @@ public class AdapterRequests extends RecyclerView.Adapter<AdapterRequests.TasksV
     }
 
     private void deleteTaskFromDbRequest(int pos) {
-        //Todo: delete the task from requests
-
         Query documentReference = FirebaseFirestore.getInstance().collection("faculty_data")
                 .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
                 .collection("task_requests").whereEqualTo("req_id", userTasksListAdapter.get(pos).getDocument_id());

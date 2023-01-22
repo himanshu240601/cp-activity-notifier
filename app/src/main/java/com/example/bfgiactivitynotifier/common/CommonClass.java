@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 public class CommonClass {
     //user data model
@@ -76,6 +75,10 @@ public class CommonClass {
             }
 
             if(end!=null && end.compareTo(current)>0 && end.compareTo(seven_days)<=0){
+                return true;
+            }
+
+            if(current!=null && current.compareTo(start)>0 && current.compareTo(end)<0){
                 return true;
             }
 
