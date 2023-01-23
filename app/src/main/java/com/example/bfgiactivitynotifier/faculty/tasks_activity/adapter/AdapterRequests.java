@@ -1,5 +1,6 @@
 package com.example.bfgiactivitynotifier.faculty.tasks_activity.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -16,8 +17,11 @@ import com.example.bfgiactivitynotifier.databinding.RequestCardBinding;
 import com.example.bfgiactivitynotifier.faculty.tasks_activity.RequestActivity;
 import com.example.bfgiactivitynotifier.firebasecloudmessaging.MyFirebaseNotificationSender;
 import com.example.bfgiactivitynotifier.models.UserTasks;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,9 +51,12 @@ public class AdapterRequests extends RecyclerView.Adapter<AdapterRequests.TasksV
         return new AdapterRequests.TasksViewHolder(tasksCardBinding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull AdapterRequests.TasksViewHolder holder, int position) {
         holder.tasksCardBinding.setReqObject(userTasksListAdapter.get(position));
+        String[] reasons = userTasksListAdapter.get(position).getReq_change().split(":");
+        holder.tasksCardBinding.changeReason.setText("Change Reasons -"+ reasons[1]);
 
         //set margin of the last card
         if(userTasksListAdapter.size()!=0 && holder.getAbsoluteAdapterPosition()==0){
@@ -121,15 +128,12 @@ public class AdapterRequests extends RecyclerView.Adapter<AdapterRequests.TasksV
     }
 
     private void deleteTaskFromDbRequest(int pos) {
-        Query documentReference = FirebaseFirestore.getInstance().collection("faculty_data")
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("faculty_data")
                 .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
-                .collection("task_requests").whereEqualTo("req_id", userTasksListAdapter.get(pos).getDocument_id());
+                .collection("task_requests").document(userTasksListAdapter.get(pos).getReq_doc_id());
 
-        documentReference.addSnapshotListener((value, error) -> {
-            if (value != null) {
-                List<DocumentSnapshot> list = value.getDocuments();
-                //delete from requests
-                list.get(list.size()-1).getReference().delete();
+        documentReference.delete().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
                 RequestActivity.userTasksList.remove(pos);
                 notifyItemRemoved(pos);
             }

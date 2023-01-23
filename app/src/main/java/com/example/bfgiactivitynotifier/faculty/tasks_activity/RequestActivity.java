@@ -14,7 +14,6 @@ import com.example.bfgiactivitynotifier.models.UserTasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,43 +28,43 @@ public class RequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityRequestBinding = DataBindingUtil.setContentView(this, R.layout.activity_request);
 
+        activityRequestBinding.backButton.setOnClickListener(v -> finish());
+
         getTasksData();
     }
 
     public static final ArrayList<UserTasks> userTasksList = new ArrayList<>();
     private void getTasksData() {
         userTasksList.clear();
+        activityRequestBinding.progressBar.setVisibility(View.VISIBLE);
         FirebaseFirestore.getInstance()
                 .collection("faculty_data")
                 .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
                 .collection("task_requests")
-                .orderBy("added_on", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
-                    List<DocumentSnapshot> documentSnapshots = Objects.requireNonNull(value).getDocuments();
-                    for (DocumentSnapshot document : documentSnapshots) {
-                        getData(
-                                Objects.requireNonNull(document.get("req_id")).toString(),
-                                Objects.requireNonNull(document.get("req_change")).toString()
-                        );
-                    }
-
-                    activityRequestBinding.progressBar.setVisibility(View.GONE);
-                    if(!userTasksList.isEmpty()){
-                        activityRequestBinding.noTasks.setVisibility(View.GONE);
-                        activityRequestBinding.recyclerViewAllRequests.setVisibility(View.VISIBLE);
-
-                        AdapterRequests userTasksAdapter = new AdapterRequests(userTasksList, this);
-                        activityRequestBinding.recyclerViewAllRequests.setLayoutManager(new LinearLayoutManager(this));
-                        activityRequestBinding.recyclerViewAllRequests.setAdapter(userTasksAdapter);
-                    }else{
-                        activityRequestBinding.recyclerViewAllRequests.setVisibility(View.GONE);
-                        activityRequestBinding.noTasks.setVisibility(View.VISIBLE);
+                    try{
+                        List<DocumentSnapshot> documentSnapshots = Objects.requireNonNull(value).getDocuments();
+                        if(documentSnapshots.isEmpty()){
+                            activityRequestBinding.progressBar.setVisibility(View.GONE);
+                            activityRequestBinding.recyclerViewAllRequests.setVisibility(View.GONE);
+                            activityRequestBinding.noTasks.setVisibility(View.VISIBLE);
+                        }else{
+                            for (DocumentSnapshot document : documentSnapshots) {
+                                getData(
+                                        Objects.requireNonNull(document.get("req_id")).toString(),
+                                        Objects.requireNonNull(document.get("req_change")).toString(),
+                                        documentSnapshots.size(),
+                                        document.getId()
+                                );
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 });
     }
 
-    private void getData(String req_id, String req_change) {
-
+    private void getData(String req_id, String req_change, int size, String id) {
         FirebaseFirestore.getInstance().collection("activities_data")
                 .document(req_id)
                 .get()
@@ -75,8 +74,22 @@ public class RequestActivity extends AppCompatActivity {
                         UserTasks userTasks = snapshot.toObject(UserTasks.class);
                         if(userTasks!=null){
                             userTasks.setReq_change(req_change);
+                            userTasks.setDocument_id(snapshot.getId());
+                            userTasks.setReq_doc_id(id);
                         }
                         userTasksList.add(userTasks);
+
+                        if(userTasksList.size()==size){
+                            activityRequestBinding.progressBar.setVisibility(View.GONE);
+                            if(!userTasksList.isEmpty()){
+                                activityRequestBinding.noTasks.setVisibility(View.GONE);
+                                activityRequestBinding.recyclerViewAllRequests.setVisibility(View.VISIBLE);
+
+                                AdapterRequests userTasksAdapter = new AdapterRequests(userTasksList, RequestActivity.this);
+                                activityRequestBinding.recyclerViewAllRequests.setLayoutManager(new LinearLayoutManager(RequestActivity.this));
+                                activityRequestBinding.recyclerViewAllRequests.setAdapter(userTasksAdapter);
+                            }
+                        }
                     }
                 });
     }

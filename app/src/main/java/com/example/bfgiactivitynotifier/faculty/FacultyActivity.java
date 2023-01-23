@@ -219,29 +219,21 @@ public class FacultyActivity extends AppCompatActivity {
 
     private UserTasks getData(DocumentSnapshot document) {
         UserTasks userTasks = null;
-//        String auth = CommonClass.modelUserData.getDesignation();
-//        if(auth.equals("faculty")) {
-//            //get data of faculty only
-//        }else if(auth.equals("HOD")){
-//            //get data of faculty only
-//        }else if(auth.equals("Dean")){
-//            //get date of hods and faculty
-//        }else{
-//            //get date of deans, hods and faculty
-//        }
-
-        if(     CommonClass.checkDateRange(Objects.requireNonNull(document.get("start_date")).toString(), Objects.requireNonNull(document.get("end_date")).toString())
-                &&
-                (CommonClass.modelUserData.getDepartment().equals(document.get("department")) &&
-                ((
-                        (CommonClass.modelUserData.getDesignation().equals("Principal") || CommonClass.modelUserData.getDesignation().equals("HOD"))
-                                && (Objects.equals(document.get("department"),CommonClass.modelUserData.getDepartment()))
-                )
-
-                        || (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
-                        || Objects.equals(document.get("action_taker"), "All Faculty")
-                        || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
-                        || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))))
+        String auth = CommonClass.modelUserData.getDesignation();
+        if(CommonClass.modelUserData.getDepartment().equals(document.get("department"))
+            && CommonClass.checkDateRange(
+                    Objects.requireNonNull(document.get("start_date")).toString(),
+                    Objects.requireNonNull(document.get("end_date")).toString())
+            &&
+            (Objects.equals(document.get("task_plan_authority"), CommonClass.modelUserData.getFull_name())
+                    || Objects.equals(document.get("action_taker"), CommonClass.modelUserData.getFull_name())
+                    || Objects.equals(document.get("action_taker"), "All Faculty")
+             || Objects.equals(document.get("added_by"), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                    || auth.equals("Principal")
+                    || (auth.equals("Faculty") && Objects.equals(document.get("added_by_designation"), auth))
+                    || (auth.equals("HOD") && (Objects.equals(document.get("added_by_designation"), auth) || Objects.equals(document.get("added_by_designation"), "Faculty")))
+                    || (auth.equals("Dean") && (!Objects.equals(document.get("added_by_designation"), "Principal")))
+            )
         ){
             userTasks = document.toObject(UserTasks.class);
             Objects.requireNonNull(userTasks).setDocument_id(document.getId());

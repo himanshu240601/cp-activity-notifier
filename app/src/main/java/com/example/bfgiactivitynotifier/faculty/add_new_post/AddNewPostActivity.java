@@ -109,6 +109,7 @@ public class AddNewPostActivity extends AppCompatActivity {
 
     private void setAutoCompleteForFollowUp() {
         followUpTakenBy.add("HOD");
+        followUpTakenBy.add("Dean");
         followUpTakenBy.add("Principal");
         ArrayAdapter<String> adapter1=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,followUpTakenBy);
         activityAddNewPostBinding.followUpTakenBy.setAdapter(adapter1);
@@ -209,6 +210,10 @@ public class AddNewPostActivity extends AppCompatActivity {
                         });
             }else{
                 if(Objects.equals(CommonClass.modelUserData.getDesignation(), "Faculty")){
+                    //add data in "task_requests"
+                    //with id and reason for change in request
+                    //on request accepted or declined the data
+                    //will be deleted from the collection
                     Map<String, Object> docData = new HashMap<>();
                     docData.put("req_id", FacultyActivity.userTasksList.get(isNew).getDocument_id());
                     docData.put("req_change", " • "+CommonClass.modelUserData.getDate()+ " : "+Objects.requireNonNull(activityAddNewPostBinding.delayReason.getText()));
@@ -217,15 +222,24 @@ public class AddNewPostActivity extends AppCompatActivity {
                     final CollectionReference collectionReference = firebaseFirestoreAuth.collection("faculty_data");
 
                     collectionReference.get().addOnCompleteListener(taskHod -> {
+                        //get the hod of the department similar to the current user
+                        //the current user will be faculty only
                         if (taskHod.isSuccessful()) {
                             for (DocumentSnapshot document : taskHod.getResult()) {
-                                if(document.get("designation")=="HOD" && document.get("department")==CommonClass.modelUserData.getDepartment()){
+                                if(Objects.requireNonNull(document.get("designation")).toString().equals("HOD")
+                                        && Objects.requireNonNull(document.get("department")).toString().equals(CommonClass.modelUserData.getDepartment())){
+                                    //add data in the collection
+                                    //when the hod and department matches
                                     collectionReference
                                             .document(document.getId())
                                             .collection("task_requests")
                                             .document()
                                             .set(docData)
-                                            .addOnCompleteListener(this, task1 -> checkCompletion(task1, operation, (String) document.get("name"), "Task Change Request - "+task, dataType))
+                                            .addOnCompleteListener(task13 -> {
+                                                if(task13.isSuccessful()){
+                                                    checkCompletion(task13, "Change Request Sent", (String) document.get("name"), "Task Change Request - "+ task13, dataType);
+                                                }
+                                            })
                                             .addOnFailureListener(this, e -> {
                                                 activityAddNewPostBinding.publishButton.setEnabled(true);
                                                 Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -286,6 +300,7 @@ public class AddNewPostActivity extends AppCompatActivity {
         if(isNew){
             docData.put("added_on", new Timestamp(new Date()));
             docData.put("added_by", FirebaseAuth.getInstance().getUid());
+            docData.put("added_by_designation", CommonClass.modelUserData.getDesignation());
             docData.put("completed", false);
             docData.put("department", CommonClass.modelUserData.getDepartment());
         }else{

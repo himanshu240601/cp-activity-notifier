@@ -200,4 +200,14 @@ public class UserTasks {
     public void setLast_updated(Timestamp last_updated) {
         this.last_updated = last_updated;
     }
+
+    private String req_doc_id;
+
+    public String getReq_doc_id() {
+        return req_doc_id;
+    }
+
+    public void setReq_doc_id(String req_doc_id) {
+        this.req_doc_id = req_doc_id;
+    }
 }

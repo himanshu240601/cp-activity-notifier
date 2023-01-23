@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/decline"
                 android:padding="8dp"
-                android:textColor="#ff0000"/>
+                android:textColor="#F44336"/>
 
             <TextView
                 android:id="@+id/approved"
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/approve"
                 android:padding="8dp"
-                android:textColor="#00ff00"/>
+                android:textColor="#4CAF50"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
