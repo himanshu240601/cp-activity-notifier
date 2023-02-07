@@ -1,6 +1,7 @@
 package com.example.bfgiactivitynotifier.common;
 
 import android.annotation.SuppressLint;
+import android.os.Environment;
 
 import com.example.bfgiactivitynotifier.models.UserModel;
 
@@ -87,5 +88,15 @@ public class CommonClass {
             return false;
         }
         return false;
+    }
+
+    public static boolean isExternalStorageReadOnly() {
+        String externalStorageState = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED_READ_ONLY.equals(externalStorageState);
+    }
+
+    public static boolean isExternalStorageAvailable() {
+        String externalStorageState = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(externalStorageState);
     }
 }

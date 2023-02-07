@@ -9,6 +9,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -18,7 +19,12 @@ import com.example.bfgiactivitynotifier.databinding.ActivityTasksBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
 import com.example.bfgiactivitynotifier.faculty.adapters.UserTasksAdapter;
 import com.example.bfgiactivitynotifier.models.UserTasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -82,13 +88,22 @@ public class TasksActivity extends AppCompatActivity {
         activityTasksBinding.progressBar.setVisibility(View.VISIBLE);
         if(text.equals("My Tasks")){
             list.addAll(FacultyActivity.userTasksList);
-        }else{
+            setRecyclerView();
+        }else if (text.equals("Tasks Added By Me")){
+            getMyTasksFromFirebase();
+        }
+        else{
             for(UserTasks userTasks : FacultyActivity.userTasksList){
                 if(userTasks.getStatus().equals(text)){
                     list.add(userTasks);
                 }
             }
+            setRecyclerView();
         }
+
+    }
+
+    private void setRecyclerView(){
         activityTasksBinding.progressBar.setVisibility(View.GONE);
         if(!list.isEmpty()){
             activityTasksBinding.noTasks.setVisibility(View.GONE);
@@ -103,6 +118,51 @@ public class TasksActivity extends AppCompatActivity {
             activityTasksBinding.recyclerViewAllTasks.setVisibility(View.GONE);
             activityTasksBinding.noTasks.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void getMyTasksFromFirebase() {
+        FirebaseFirestore.getInstance().collection("activities_data").orderBy("added_on", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        List<DocumentSnapshot> documentSnapshotList = task.getResult().getDocuments();
+                        for (DocumentSnapshot documentSnapshot: documentSnapshotList){
+                            UserTasks userTasks = documentSnapshot.toObject(UserTasks.class);
+                            if(userTasks != null && Objects.equals(userTasks.getAdded_by(), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())){
+
+                                Objects.requireNonNull(userTasks).setDocument_id(documentSnapshot.getId());
+                                int colorTask = R.color.completed;
+                                if(!userTasks.isCompleted()){
+                                    try {
+                                        String start = userTasks.getStart_date();
+                                        String end = userTasks.getEnd_date();
+                                        String status = new CommonClass().getTasksStatus(start, end);
+                                        switch (status){
+                                            case "Upcoming Tasks":
+                                                colorTask = R.color.upcoming;
+                                                break;
+                                            case "In Progress":
+                                                colorTask = R.color.inProgress;
+                                                break;
+                                            case "Not Complete":
+                                                colorTask = R.color.notComplete;
+                                        }
+                                        userTasks.setColor(ContextCompat.getColor(this, colorTask));
+                                        userTasks.setStatus(status);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    Objects.requireNonNull(userTasks).setStatus("Completed Tasks");
+                                    userTasks.setColor(ContextCompat.getColor(this, colorTask));
+                                }
+
+                                list.add(userTasks);
+                            }
+                        }
+                        setRecyclerView();
+                    }
+                });
     }
 
     @SuppressLint("NonConstantResourceId")

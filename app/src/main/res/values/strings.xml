@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Task Notifier</string>
+    <string name="app_version">2.5.0</string>
     <string name="go_back">Go Back</string>
     <string name="enter_your_uid">Enter your UID</string>
     <string name="enter_your_mobile">Enter your Mobile no.</string>
@@ -112,4 +113,7 @@
     <string name="reason_for_change_s">Reason for change : %s</string>
     <string name="decline">Decline</string>
     <string name="approve">Approve</string>
+    <string name="download_data">Download Data</string>
+    <string name="my_profile">My Profile</string>
+    <string name="added_tasks">Added Tasks</string>
 </resources>
