@@ -45,15 +45,15 @@ public class AdapterRequests extends RecyclerView.Adapter<AdapterRequests.TasksV
 
     @NonNull
     @Override
-    public AdapterRequests.TasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RequestCardBinding tasksCardBinding = DataBindingUtil.inflate(layoutInflater, R.layout.request_card, parent, false);
-        return new AdapterRequests.TasksViewHolder(tasksCardBinding);
+        return new TasksViewHolder(tasksCardBinding);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull AdapterRequests.TasksViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TasksViewHolder holder, int position) {
         holder.tasksCardBinding.setReqObject(userTasksListAdapter.get(position));
         String[] reasons = userTasksListAdapter.get(position).getReq_change().split(":");
         holder.tasksCardBinding.changeReason.setText("Change Reasons -"+ reasons[1]);

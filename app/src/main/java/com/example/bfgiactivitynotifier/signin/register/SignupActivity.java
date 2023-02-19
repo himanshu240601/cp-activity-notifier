@@ -2,12 +2,9 @@ package com.example.bfgiactivitynotifier.signin.register;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -16,11 +13,10 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.bfgiactivitynotifier.R;
-import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivitySignupBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
-import com.example.bfgiactivitynotifier.models.UserModel;
 import com.example.bfgiactivitynotifier.signin.SignInActivity;
+import com.example.bfgiactivitynotifier.signin.form_functions.FormFunctionality;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,10 +30,10 @@ public class SignupActivity extends AppCompatActivity {
 
     private ActivitySignupBinding activitySignupBinding;
 
+    private final FormFunctionality formFunctionality = new FormFunctionality();
+
     //by default the password is hidden
     private boolean toggle_password = false;
-
-    private final CommonClass commonClass = new CommonClass();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -84,17 +80,20 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         activitySignupBinding.buttonSignIn.setOnClickListener(v -> {
+
             String mobile = activitySignupBinding.editTextMobile.getText().toString().trim();
             String name = activitySignupBinding.editTextName.getText().toString().trim();
             String name_pre = activitySignupBinding.editTextNamePrefix.getText().toString().trim();
             String department = activitySignupBinding.editTextDepartment.getText().toString().trim();
             String designation = activitySignupBinding.editTextDesignation.getText().toString().trim();
             String key = activitySignupBinding.editTextPassword.getText().toString().trim();
-            if(validateForm(mobile, name, department, designation, key)){
+
+            if(formFunctionality.validateForm(this, mobile, name, department, designation, key)){
                 activitySignupBinding.buttonSignIn.setEnabled(false);
                 clearFocus();
                 createUser(mobile+"@bfgi.com", name_pre+" "+name, department, designation, key);
             }
+            activitySignupBinding.buttonSignIn.setEnabled(true);
         });
     }
 
@@ -122,25 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                                         .addOnCompleteListener(SignupActivity.this, task1 -> {
                                             if(task1.isSuccessful()){
                                                 //save data in shared preferences
-                                                SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
-                                                sp.edit().putBoolean("logged", true).apply();
-
-                                                String[] name_str = name.split(" ");
-
-                                                sp.edit().putString("user_id", mobile).apply();
-                                                sp.edit().putString("full_name", name).apply();
-                                                sp.edit().putString("first_name", name_str[1]).apply();
-                                                sp.edit().putString("designation", designation).apply();
-                                                sp.edit().putString("department", department).apply();
-
-                                                UserModel userModel = new UserModel(
-                                                        mobile,
-                                                        name,
-                                                        name_str[1],
-                                                        designation,
-                                                        department
-                                                );
-                                                commonClass.setModelUserData(userModel);
+                                                formFunctionality.addDataToSharedPres(this, name, department, designation, mobile);
                                                 //according to the type of user
                                                 //go to the next screen
                                                 activitySignupBinding.buttonSignIn.setEnabled(true);
@@ -159,30 +140,6 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     activitySignupBinding.buttonSignIn.setEnabled(true);
                 });
-    }
-
-    private boolean validateForm(String mobile, String name, String department, String designation, String key) {
-        if(mobile.length() < 10){
-            Toast.makeText(this, "Please enter valid mobile no.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(name.isEmpty()){
-            Toast.makeText(this, "Please enter a name!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(department.isEmpty()){
-            Toast.makeText(this, "Please select your department!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(designation.isEmpty()){
-            Toast.makeText(this, "Please select your designation!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(key.isEmpty()){
-            Toast.makeText(this, "Please enter a password!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
     private final ArrayList<String> department = new ArrayList<>();

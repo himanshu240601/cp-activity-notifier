@@ -26,14 +26,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @NonNull
     @Override
-    public NotificationsAdapter.NotificationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NotificationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         NotificationCardBinding notificationCardBinding = DataBindingUtil.inflate(layoutInflater, R.layout.notification_card, parent, false);
-        return new NotificationsAdapter.NotificationsViewHolder(notificationCardBinding);
+        return new NotificationsViewHolder(notificationCardBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotificationsAdapter.NotificationsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NotificationsViewHolder holder, int position) {
         holder.notificationCardBinding.setNotificationObject(notificationModels.get(position));
     }
 

@@ -220,7 +220,9 @@ public class FacultyActivity extends AppCompatActivity {
     private UserTasks getData(DocumentSnapshot document) {
         UserTasks userTasks = null;
         String auth = CommonClass.modelUserData.getDesignation();
-        if(CommonClass.modelUserData.getDepartment().equals(document.get("department"))
+        if( checkUserCriteria((String) document.get("task_type"))
+                || (
+                CommonClass.modelUserData.getDepartment().equals(document.get("department"))
             && CommonClass.checkDateRange(
                     Objects.requireNonNull(document.get("start_date")).toString(),
                     Objects.requireNonNull(document.get("end_date")).toString())
@@ -234,7 +236,7 @@ public class FacultyActivity extends AppCompatActivity {
                     || (auth.equals("HOD") && (Objects.equals(document.get("added_by_designation"), auth) || Objects.equals(document.get("added_by_designation"), "Faculty")))
                     || (auth.equals("Dean") && (!Objects.equals(document.get("added_by_designation"), "Principal")))
             )
-        ){
+        )){
             userTasks = document.toObject(UserTasks.class);
             Objects.requireNonNull(userTasks).setDocument_id(document.getId());
             int colorTask = R.color.completed;
@@ -265,6 +267,22 @@ public class FacultyActivity extends AppCompatActivity {
 
         }
         return userTasks;
+    }
+
+    private boolean checkUserCriteria(String taskType) {
+
+        Boolean[] returnBool = new Boolean[]{false};
+
+        FirebaseFirestore.getInstance().collection("faculty_data")
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                .get().addOnCompleteListener(task -> {
+                    String criteria = (String) task.getResult().get("criteria");
+                    if(criteria != null && Objects.requireNonNull(criteria).equals(taskType)){
+                        returnBool[0] = true;
+                    }
+                });
+
+        return returnBool[0];
     }
 
     private void subscribeToFirebaseTopic() {

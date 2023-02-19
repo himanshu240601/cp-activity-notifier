@@ -118,6 +118,14 @@ public class AddNewPostActivity extends AppCompatActivity {
     private void setAutoCompleteForTaskType() {
         taskType.add("Academics");
         taskType.add("Ranking");
+        taskType.add("DAA");
+        taskType.add("DSW");
+        taskType.add("NAAC");
+        taskType.add("Criteria 1");
+        taskType.add("Criteria 2");
+        taskType.add("Criteria 3");
+        taskType.add("Criteria 4");
+        taskType.add("Criteria 5");
         ArrayAdapter<String> adapter1=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,taskType);
         activityAddNewPostBinding.typeOfTask.setAdapter(adapter1);
     }

@@ -53,7 +53,6 @@ public class RequestActivity extends AppCompatActivity {
                                 getData(
                                         Objects.requireNonNull(document.get("req_id")).toString(),
                                         Objects.requireNonNull(document.get("req_change")).toString(),
-                                        documentSnapshots.size(),
                                         document.getId()
                                 );
                             }
@@ -64,7 +63,7 @@ public class RequestActivity extends AppCompatActivity {
                 });
     }
 
-    private void getData(String req_id, String req_change, int size, String id) {
+    private void getData(String req_id, String req_change, String id) {
         FirebaseFirestore.getInstance().collection("activities_data")
                 .document(req_id)
                 .get()
@@ -79,16 +78,15 @@ public class RequestActivity extends AppCompatActivity {
                         }
                         userTasksList.add(userTasks);
 
-                        if(userTasksList.size()==size){
-                            activityRequestBinding.progressBar.setVisibility(View.GONE);
-                            if(!userTasksList.isEmpty()){
-                                activityRequestBinding.noTasks.setVisibility(View.GONE);
-                                activityRequestBinding.recyclerViewAllRequests.setVisibility(View.VISIBLE);
+                        activityRequestBinding.progressBar.setVisibility(View.GONE);
 
-                                AdapterRequests userTasksAdapter = new AdapterRequests(userTasksList, RequestActivity.this);
-                                activityRequestBinding.recyclerViewAllRequests.setLayoutManager(new LinearLayoutManager(RequestActivity.this));
-                                activityRequestBinding.recyclerViewAllRequests.setAdapter(userTasksAdapter);
-                            }
+                        if(!userTasksList.isEmpty()){
+                            activityRequestBinding.noTasks.setVisibility(View.GONE);
+                            activityRequestBinding.recyclerViewAllRequests.setVisibility(View.VISIBLE);
+
+                            AdapterRequests userTasksAdapter = new AdapterRequests(userTasksList, RequestActivity.this);
+                            activityRequestBinding.recyclerViewAllRequests.setLayoutManager(new LinearLayoutManager(RequestActivity.this));
+                            activityRequestBinding.recyclerViewAllRequests.setAdapter(userTasksAdapter);
                         }
                     }
                 });

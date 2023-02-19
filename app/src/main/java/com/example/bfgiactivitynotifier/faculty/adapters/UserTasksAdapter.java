@@ -54,7 +54,7 @@ public class UserTasksAdapter extends RecyclerView.Adapter<UserTasksAdapter.Task
     public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         TasksCardBinding tasksCardBinding = DataBindingUtil.inflate(layoutInflater, R.layout.tasks_card, parent, false);
-        return new UserTasksAdapter.TasksViewHolder(tasksCardBinding);
+        return new TasksViewHolder(tasksCardBinding);
     }
 
     @Override

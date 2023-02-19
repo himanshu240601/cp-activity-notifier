@@ -1,7 +1,6 @@
 package com.example.bfgiactivitynotifier.signin;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,10 +11,9 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.bfgiactivitynotifier.R;
-import com.example.bfgiactivitynotifier.common.CommonClass;
 import com.example.bfgiactivitynotifier.databinding.ActivitySignInBinding;
 import com.example.bfgiactivitynotifier.faculty.FacultyActivity;
-import com.example.bfgiactivitynotifier.models.UserModel;
+import com.example.bfgiactivitynotifier.signin.form_functions.FormFunctionality;
 import com.example.bfgiactivitynotifier.signin.register.SignupActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,13 +22,12 @@ import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity {
 
-    //declare binding class object
-    ActivitySignInBinding activitySignInBinding;
+    private ActivitySignInBinding activitySignInBinding;
+
+    private final FormFunctionality formFunctionality = new FormFunctionality();
 
     //by default the password is hidden
     private boolean toggle_password = false;
-
-    private final CommonClass commonClass = new CommonClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +72,7 @@ public class SignInActivity extends AppCompatActivity {
             //and not empty or contains some unwanted keywords
             //store the boolean value returned by the validate()
             //function into isValid variable
-            boolean isValid = validate(id, key);
+            boolean isValid = formFunctionality.validateForm(this, id, key);
 
             //if isValid == true
             //check if user exist in the database
@@ -88,10 +85,6 @@ public class SignInActivity extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(id, key)
                         .addOnCompleteListener(this, task -> {
                             if(task.isSuccessful()){
-                                //save data in shared preferences
-                                SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
-                                sp.edit().putBoolean("logged", true).apply();
-
                                 //set the user data model
                                 //this will be used at various activities
                                 //or fragments in the application
@@ -100,25 +93,11 @@ public class SignInActivity extends AppCompatActivity {
                                         Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()
                                 ).addSnapshotListener((value, error) -> {
                                     if(value!=null){
-                                        String name = value.getString("name");
-                                        String[] name_str = Objects.requireNonNull(name).split(" ");
-                                        String designation = value.getString("designation");
-                                        String department = value.getString("department");
-
-                                        sp.edit().putString("user_id", user_id).apply();
-                                        sp.edit().putString("full_name", name).apply();
-                                        sp.edit().putString("first_name", name_str[1]).apply();
-                                        sp.edit().putString("designation", designation).apply();
-                                        sp.edit().putString("department", department).apply();
-
-                                        UserModel userModel = new UserModel(
-                                                user_id,
-                                                name,
-                                                name_str[1],
-                                                designation,
-                                                department
-                                        );
-                                        commonClass.setModelUserData(userModel);
+                                        formFunctionality.addDataToSharedPres(this,
+                                                Objects.requireNonNull(value.getString("name")),
+                                                value.getString("designation"),
+                                                value.getString("department"),
+                                                user_id);
                                         //according to the type of user
                                         //go to the next screen
                                         startActivity(new Intent(SignInActivity.this, FacultyActivity.class));
@@ -144,23 +123,5 @@ public class SignInActivity extends AppCompatActivity {
         toggle_password = is_true;
         activitySignInBinding.passwordToggle.setImageDrawable(drawable);
         activitySignInBinding.editTextPassword.setInputType(inputType);
-    }
-
-
-    //function to validate user input
-    private boolean validate(String id, String key){
-        if(id.isEmpty()){
-            Toast.makeText(this, "Please enter a valid mobile number!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(id.length()!=10){
-            Toast.makeText(this, "Please enter a valid mobile number!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(key.isEmpty()){
-            Toast.makeText(this, "Please enter a valid password!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 }

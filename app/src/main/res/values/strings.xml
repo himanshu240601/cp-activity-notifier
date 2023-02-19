@@ -116,4 +116,5 @@
     <string name="download_data">Download Data</string>
     <string name="my_profile">My Profile</string>
     <string name="added_tasks">Added Tasks</string>
+    <string name="tasks">Tasks</string>
 </resources>
